@@ -1,6 +1,7 @@
 package com.bth.Model;
 
-import java.util.Vector;
+import com.bth.Model.Trucks.DeliveryTruck;
+import ev3dev.sensors.Battery;
 
 public interface Truck {
 
@@ -16,6 +17,7 @@ public interface Truck {
   void stop();
 
   void craneStart();
+
   void craneStop();
 
   /**
@@ -32,9 +34,20 @@ public interface Truck {
    */
   void readLines(int color);
 
-  Vector<Double> getPosition();
-
   String getName();
 
   int getId();
+
+  default boolean checkBattery() {
+    System.out.println("Battery Voltage: " + Battery.getInstance().getVoltage());
+    System.out.println("Battery Current: " + Battery.getInstance().getBatteryCurrent());
+    if (Battery.getInstance().getVoltage() < DeliveryTruck.minVoltage) {
+      System.out.println("Battery voltage to low, shutdown");
+      System.out.println("Please change the batteries");
+      System.exit(0);
+      return false;
+    }
+    return true;
+  }
+
 }
