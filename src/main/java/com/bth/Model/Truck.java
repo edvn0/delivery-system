@@ -16,8 +16,14 @@ public interface Truck {
    */
   void stop();
 
+  /***
+   * Moves the crane in some direction.
+   */
   void craneStart();
 
+  /***
+   * Stops the crane.
+   */
   void craneStop();
 
   /**

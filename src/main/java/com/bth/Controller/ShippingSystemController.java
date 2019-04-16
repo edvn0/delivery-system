@@ -1,6 +1,7 @@
 package com.bth.Controller;
 
 import com.bth.Controller.DeliveryThread.DeliveryTruckRunnable;
+import com.bth.Controller.Thread.DTThreadPooledServer;
 import com.bth.Model.Trucks.ContainerTruck;
 import com.bth.Model.Trucks.DeliveryTruck;
 import com.bth.Model.Trucks.ForkliftTruck;
@@ -14,7 +15,11 @@ import java.util.ArrayList;
  */
 public class ShippingSystemController {
 
-  static final double leastDistance = 0.25; // 25 centimeters.
+  private static final double leastDistance = 0.25; // 25 centimeters.
+
+  // Server stuff
+  private DTThreadPooledServer pooledServer;
+  private DeliveryTruck truck;
 
   // Models
   private ArrayList<ForkliftTruck> forkliftTrucks;
@@ -24,36 +29,113 @@ public class ShippingSystemController {
   // View
   private ShippingSystemView view;
 
-  public ShippingSystemController(ArrayList<ForkliftTruck> forkliftTrucks,
-      ArrayList<ContainerTruck> containerTrucks,
-      ArrayList<DeliveryTruck> deliveryTrucks, ShippingSystemView view) {
-
+  public ShippingSystemController(ShippingSystemView view, DeliveryTruck truck) {
     this.view = view;
-    this.containerTrucks = containerTrucks;
-    this.deliveryTrucks = deliveryTrucks;
-    this.forkliftTrucks = forkliftTrucks;
+    this.truck = truck;
+
+    // Null for now! Todo: fix.
+    this.containerTrucks = null;
+    this.deliveryTrucks = null;
+    this.forkliftTrucks = null;
   }
 
-  public ShippingSystemController(ShippingSystemView view) {
-    this.view = view;
-    this.containerTrucks = view.getContainerTrucks();
-    this.deliveryTrucks = view.getDeliveryTrucks();
-    this.forkliftTrucks = view.getForkliftTrucks();
-  }
-
-  private void checkSurroundingsForTrucks() {
-    for (ForkliftTruck ft : forkliftTrucks) {
-      for (ContainerTruck ct : containerTrucks) {
-      }
-    }
-  }
-
-  public boolean initalizeRunThread(DeliveryTruckRunnable run, int id) {
+  public boolean initalizeRunThread(int id) {
+    DeliveryTruckRunnable run;
     run = new DeliveryTruckRunnable(id);
     DeliveryTruck.runThreadIsExecuted = true;
     DeliveryTruck.runThreadIsStarted = true;
+    run.setTruck(truck);
     run.start();
     return true;
+  }
+
+  public void updateView() {
+    while (!DeliveryTruck.runThreadIsExecuted) {
+      System.out.println("thread executed " + DeliveryTruck.runThreadIsExecuted);
+
+      try {
+        Thread.sleep(10 * 100);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+
+      if (DeliveryTruck.runThreadIsExecuted) {
+        DeliveryTruck.inputCommandSCS = "";
+        DeliveryTruck.runThreadIsStarted = false;
+        DeliveryTruck.isRunning = false;
+      }
+    }
+    this.view.printInfo(forkliftTrucks, containerTrucks, deliveryTrucks);
+  }
+
+  public void setPooledServer(DTThreadPooledServer dtThreadPooledServer) {
+    this.pooledServer = dtThreadPooledServer;
+  }
+
+  public void runPooledServer() {
+    while (DeliveryTruck.isRunning) {
+      if (DeliveryTruck.inputCommandSCS.equals("KILL")) {
+        DeliveryTruck.isRunning = false;
+      }
+
+      if (DeliveryTruck.inputCommandSCS.equals("RUN") && (!DeliveryTruck.runThreadIsStarted)) {
+        initalizeRunThread(1);
+      }
+
+      if (!DeliveryTruck.runThreadIsExecuted) {
+        try {
+          Thread.sleep(10 * 100);
+        } catch (InterruptedException e) {
+          e.printStackTrace();
+        }
+      } else {
+        DeliveryTruck.inputCommandSCS = "";
+        DeliveryTruck.runThreadIsStarted = false;
+      }
+
+      if (DeliveryTruck.outputCommandSCS.equals("FINISHED")) {
+        System.out.println("Main is finished.");
+        pooledServer.isRunning();
+      }
+
+    }
+  }
+
+  public DTThreadPooledServer getPooledServer() {
+    return this.pooledServer;
+  }
+
+  public DeliveryTruck getDeliveryTruck() {
+    return this.truck;
+  }
+
+  public ContainerTruck getContainerTruck(String name, int id) {
+    for (ContainerTruck ct : this.containerTrucks) {
+      if (name.equals(ct.getName()) && id == ct.getId()) {
+        return ct;
+      }
+    }
+    return null;
+  }
+
+  public void setForkliftTrucks(ArrayList<ForkliftTruck> forkliftTrucks) {
+    this.forkliftTrucks = forkliftTrucks;
+  }
+
+  public void setContainerTrucks(ArrayList<ContainerTruck> containerTrucks) {
+    this.containerTrucks = containerTrucks;
+  }
+
+  public void setDeliveryTrucks(ArrayList<DeliveryTruck> deliveryTrucks) {
+    this.deliveryTrucks = deliveryTrucks;
+  }
+
+  public void setView(ShippingSystemView view) {
+    this.view = view;
+  }
+
+  public ShippingSystemView getView() {
+    return view;
   }
 
   public static double getLeastDistance() {
@@ -88,53 +170,5 @@ public class ShippingSystemController {
       }
     }
     return null;
-  }
-
-  public ContainerTruck getContainerTruck(String name, int id) {
-    for (ContainerTruck ct : this.containerTrucks) {
-      if (name.equals(ct.getName()) && id == ct.getId()) {
-        return ct;
-      }
-    }
-    return null;
-  }
-
-  public void setForkliftTrucks(ArrayList<ForkliftTruck> forkliftTrucks) {
-    this.forkliftTrucks = forkliftTrucks;
-  }
-
-  public void setContainerTrucks(ArrayList<ContainerTruck> containerTrucks) {
-    this.containerTrucks = containerTrucks;
-  }
-
-  public void setDeliveryTrucks(ArrayList<DeliveryTruck> deliveryTrucks) {
-    this.deliveryTrucks = deliveryTrucks;
-  }
-
-  public void setView(ShippingSystemView view) {
-    this.view = view;
-  }
-
-  public ShippingSystemView getView() {
-    return view;
-  }
-
-  public void updateView() {
-    while (!DeliveryTruck.runThreadIsExecuted) {
-      System.out.println("thread executed " + DeliveryTruck.runThreadIsExecuted);
-
-      try {
-        Thread.sleep(10 * 100);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
-
-      if (DeliveryTruck.runThreadIsExecuted) {
-        DeliveryTruck.inputCommandSCS = "";
-        DeliveryTruck.runThreadIsStarted = false;
-        DeliveryTruck.isRunning = false;
-      }
-    }
-    this.view.printInfo(forkliftTrucks, containerTrucks, deliveryTrucks);
   }
 }
