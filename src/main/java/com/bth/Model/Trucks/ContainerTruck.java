@@ -3,7 +3,7 @@ package com.bth.Model.Trucks;
 import com.bth.Model.Truck;
 import com.bth.Model.TruckColourEnum;
 
-public class ContainerTruck implements Truck {
+public class ContainerTruck extends Truck {
 
   private String name;
   private int colorForLines;

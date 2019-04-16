@@ -2,6 +2,7 @@ package com.bth.Controller;
 
 import com.bth.Controller.DeliveryThread.DeliveryTruckRunnable;
 import com.bth.Controller.Thread.DTThreadPooledServer;
+import com.bth.Model.Truck;
 import com.bth.Model.Trucks.ContainerTruck;
 import com.bth.Model.Trucks.DeliveryTruck;
 import com.bth.Model.Trucks.ForkliftTruck;
@@ -42,8 +43,8 @@ public class ShippingSystemController {
   public boolean initalizeRunThread(int id) {
     DeliveryTruckRunnable run;
     run = new DeliveryTruckRunnable(id);
-    DeliveryTruck.runThreadIsExecuted = true;
-    DeliveryTruck.runThreadIsStarted = true;
+    Truck.runThreadIsExecuted = true;
+    Truck.runThreadIsStarted = true;
     run.setTruck(truck);
     run.start();
     return true;
@@ -73,27 +74,27 @@ public class ShippingSystemController {
   }
 
   public void runPooledServer() {
-    while (DeliveryTruck.isRunning) {
-      if (DeliveryTruck.inputCommandSCS.equals("KILL")) {
-        DeliveryTruck.isRunning = false;
+    while (Truck.isRunning) {
+      if (Truck.inputCommandSCS.equals("KILL")) {
+        Truck.isRunning = false;
       }
 
-      if (DeliveryTruck.inputCommandSCS.equals("RUN") && (!DeliveryTruck.runThreadIsStarted)) {
+      if (Truck.inputCommandSCS.equals("RUN") && (!Truck.runThreadIsStarted)) {
         initalizeRunThread(1);
       }
 
-      if (!DeliveryTruck.runThreadIsExecuted) {
+      if (!Truck.runThreadIsExecuted) {
         try {
           Thread.sleep(10 * 100);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
       } else {
-        DeliveryTruck.inputCommandSCS = "";
-        DeliveryTruck.runThreadIsStarted = false;
+        Truck.inputCommandSCS = "";
+        Truck.runThreadIsStarted = false;
       }
 
-      if (DeliveryTruck.outputCommandSCS.equals("FINISHED")) {
+      if (Truck.outputCommandSCS.equals("FINISHED")) {
         System.out.println("Main is finished.");
         pooledServer.isRunning();
       }

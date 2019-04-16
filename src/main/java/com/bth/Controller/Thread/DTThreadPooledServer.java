@@ -1,6 +1,6 @@
 package com.bth.Controller.Thread;
 
-import com.bth.Model.Trucks.DeliveryTruck;
+import com.bth.Model.Truck;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -76,7 +76,7 @@ public class DTThreadPooledServer extends Thread {
   }
 
   public void isRunning() {
-    if (DeliveryTruck.outputCommandSCS.equals("FINISHED")) {
+    if (Truck.outputCommandSCS.equals("FINISHED")) {
       socket.isRunningWR();
     }
   }

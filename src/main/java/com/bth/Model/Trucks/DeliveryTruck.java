@@ -10,24 +10,11 @@ import ev3dev.sensors.ev3.EV3UltrasonicSensor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.SensorPort;
 
-public class DeliveryTruck implements Truck {
+public class DeliveryTruck extends Truck {
 
   /**
    * START CONFIG
    */
-  private static int HALF_SECOND = 500;
-  public static double minVoltage = 7.200d;
-
-  //Synchronization variables between threads to allow intra thread communication
-  //Main variable for stopping execution
-  public static boolean isRunning = true;
-  //Variables for commands from/to SCS
-  public static String inputCommandSCS = "";
-  public static String outputCommandSCS = "none";
-  //Variables for controlling task thread
-  public static boolean runThreadIsStarted = false;
-  public static boolean runThreadIsExecuted = false;
-
   //motor for drive forwards and backwards - connected to motor port D
   public EV3MediumRegulatedMotor motorDrive;
   //motor for steering - connected to motor port C
@@ -64,9 +51,14 @@ public class DeliveryTruck implements Truck {
 
   @Override
   public void move(int dir) {
-    if (this.checkBattery()) {
+    if (super.checkBattery()) {
       switch (dir) {
-
+        case 0:
+        case 1:
+        case 2:
+        case 3:
+        default:
+          break;
       }
     }
   }

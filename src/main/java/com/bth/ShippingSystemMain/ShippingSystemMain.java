@@ -20,13 +20,14 @@ public class ShippingSystemMain {
         shippingSystem.getDeliveries());
     ShippingSystemController controller = new ShippingSystemController(view, truck);
 
+    controller.initalizeRunThread(1);
+
     // Pooled Server initialisation
     controller.setPooledServer(new DTThreadPooledServer("ServerThread-1", 8000));
     controller.getPooledServer().start();
     // DT initialisation
     controller.getDeliveryTruck().initializeMotors();
     controller.getDeliveryTruck().initializeSensors();
-    controller.initalizeRunThread(1);
 
     controller.runPooledServer();
     controller.updateView();
