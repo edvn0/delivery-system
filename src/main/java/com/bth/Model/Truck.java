@@ -15,6 +15,9 @@ public interface Truck {
    */
   void stop();
 
+  void craneStart();
+  void craneStop();
+
   /**
    * Reads information regarding packages or delivery tasks in a barcode.
    *

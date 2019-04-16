@@ -8,8 +8,17 @@ import java.util.Arrays;
 
 public class ShippingSystemView {
 
-  public ShippingSystemView() {
-    // Implement something here.
+  private ArrayList<ForkliftTruck> forkliftTrucks;
+  private ArrayList<ContainerTruck> containerTrucks;
+  private ArrayList<DeliveryTruck> deliveryTrucks;
+
+  public ShippingSystemView(ArrayList<ForkliftTruck> forkliftTrucks,
+      ArrayList<ContainerTruck> containerTrucks,
+      ArrayList<DeliveryTruck> deliveryTrucks) {
+
+    this.forkliftTrucks = forkliftTrucks;
+    this.containerTrucks = containerTrucks;
+    this.deliveryTrucks = deliveryTrucks;
   }
 
   public void printInfo(
@@ -26,4 +35,27 @@ public class ShippingSystemView {
     );
   }
 
+  public ArrayList<ForkliftTruck> getForkliftTrucks() {
+    return forkliftTrucks;
+  }
+
+  public void setForkliftTrucks(ArrayList<ForkliftTruck> forkliftTrucks) {
+    this.forkliftTrucks = forkliftTrucks;
+  }
+
+  public ArrayList<ContainerTruck> getContainerTrucks() {
+    return containerTrucks;
+  }
+
+  public void setContainerTrucks(ArrayList<ContainerTruck> containerTrucks) {
+    this.containerTrucks = containerTrucks;
+  }
+
+  public ArrayList<DeliveryTruck> getDeliveryTrucks() {
+    return deliveryTrucks;
+  }
+
+  public void setDeliveryTrucks(ArrayList<DeliveryTruck> deliveryTrucks) {
+    this.deliveryTrucks = deliveryTrucks;
+  }
 }

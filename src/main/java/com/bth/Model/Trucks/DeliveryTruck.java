@@ -26,7 +26,15 @@ public class DeliveryTruck implements Truck {
   @Override
   public void stop() {
   }
+  @Override
+  public void craneStart() {
 
+  }
+
+  @Override
+  public void craneStop() {
+
+  }
   @Override
   public boolean readInfo(int barcode) {
     return false;

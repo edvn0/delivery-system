@@ -7,10 +7,16 @@ public class ShippingSystemMain {
 
   public static void main(String[] args) {
     java.awt.EventQueue.invokeLater(() -> {
-      new ShippingSystem();
-      ShippingSystemView view = new ShippingSystemView();
-      ShippingSystemController controller = new ShippingSystemController(ShippingSystem.forklifts,
-          ShippingSystem.containers, ShippingSystem.deliveries, view);
+      ShippingSystem shippingSystem = new ShippingSystem();
+      ShippingSystemView view = new ShippingSystemView(
+          shippingSystem.getForklifts(),
+          shippingSystem.getContainers(),
+          shippingSystem.getDeliveries());
+      ShippingSystemController controller = new ShippingSystemController(
+          shippingSystem.getForklifts(),
+          shippingSystem.getContainers(),
+          shippingSystem.getDeliveries(),
+          view);
 
       controller.updateView();
 

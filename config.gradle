@@ -1,0 +1,16 @@
+project.ext {
+
+    mainClass = "ShippingSystemMain.ShippingSystemMain"
+
+    brickHost = "192.168.121.127"
+    brickUser = "robot"
+    brickPassword = "maker"
+
+    opencv = false
+    rxtx = false
+
+    useSudo = true
+    useTime = true
+    useBrickrun = false
+
+}

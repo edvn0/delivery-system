@@ -18,9 +18,18 @@ public class ForkliftTruck implements Truck {
     this.id = id;
   }
 
-
   @Override
   public void move(int dir) {
+  }
+
+  @Override
+  public void craneStart() {
+
+  }
+
+  @Override
+  public void craneStop() {
+
   }
 
   @Override

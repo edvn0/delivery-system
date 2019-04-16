@@ -7,9 +7,9 @@ import java.util.ArrayList;
 
 public class ShippingSystem {
 
-  public static ArrayList<ForkliftTruck> forklifts;
-  public static ArrayList<ContainerTruck> containers;
-  public static ArrayList<DeliveryTruck> deliveries;
+  private ArrayList<ForkliftTruck> forklifts;
+  private ArrayList<ContainerTruck> containers;
+  private ArrayList<DeliveryTruck> deliveries;
 
   public ShippingSystem() {
     forklifts = new ArrayList<>();
@@ -25,15 +25,15 @@ public class ShippingSystem {
     deliveries.add(new DeliveryTruck("Second DT", 2));
   }
 
-  public static ArrayList<ForkliftTruck> getForklifts() {
+  public ArrayList<ForkliftTruck> getForklifts() {
     return forklifts;
   }
 
-  public static ArrayList<ContainerTruck> getContainers() {
+  public ArrayList<ContainerTruck> getContainers() {
     return containers;
   }
 
-  public static ArrayList<DeliveryTruck> getDeliveries() {
+  public ArrayList<DeliveryTruck> getDeliveries() {
     return deliveries;
   }
 }

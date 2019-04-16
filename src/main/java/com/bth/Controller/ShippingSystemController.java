@@ -16,12 +16,12 @@ public class ShippingSystemController {
   static final double leastDistance = 0.25; // 25 centimeters.
 
   // Models
-  ArrayList<ForkliftTruck> forkliftTrucks;
-  ArrayList<ContainerTruck> containerTrucks;
-  ArrayList<DeliveryTruck> deliveryTrucks;
+  private ArrayList<ForkliftTruck> forkliftTrucks;
+  private ArrayList<ContainerTruck> containerTrucks;
+  private ArrayList<DeliveryTruck> deliveryTrucks;
 
   // View
-  ShippingSystemView view;
+  private ShippingSystemView view;
 
   public ShippingSystemController(ArrayList<ForkliftTruck> forkliftTrucks,
       ArrayList<ContainerTruck> containerTrucks,

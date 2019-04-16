@@ -28,6 +28,16 @@ public class ContainerTruck implements Truck {
   }
 
   @Override
+  public void craneStart() {
+
+  }
+
+  @Override
+  public void craneStop() {
+
+  }
+
+  @Override
   public boolean readInfo(int barcode) {
     return false;
   }
@@ -39,7 +49,7 @@ public class ContainerTruck implements Truck {
 
   @Override
   public String toString() {
-    return "Container Truck \""+this.name+"\"\n";
+    return "Container Truck \"" + this.name + "\"\n";
   }
 
   @Override
