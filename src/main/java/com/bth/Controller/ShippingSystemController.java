@@ -1,5 +1,6 @@
 package com.bth.Controller;
 
+import com.bth.Controller.DeliveryThread.DeliveryTruckRunnable;
 import com.bth.Model.Trucks.ContainerTruck;
 import com.bth.Model.Trucks.DeliveryTruck;
 import com.bth.Model.Trucks.ForkliftTruck;
@@ -33,11 +34,26 @@ public class ShippingSystemController {
     this.forkliftTrucks = forkliftTrucks;
   }
 
+  public ShippingSystemController(ShippingSystemView view) {
+    this.view = view;
+    this.containerTrucks = view.getContainerTrucks();
+    this.deliveryTrucks = view.getDeliveryTrucks();
+    this.forkliftTrucks = view.getForkliftTrucks();
+  }
+
   private void checkSurroundingsForTrucks() {
     for (ForkliftTruck ft : forkliftTrucks) {
       for (ContainerTruck ct : containerTrucks) {
       }
     }
+  }
+
+  public boolean initalizeRunThread(DeliveryTruckRunnable run, int id) {
+    run = new DeliveryTruckRunnable(id);
+    DeliveryTruck.runThreadIsExecuted = true;
+    DeliveryTruck.runThreadIsStarted = true;
+    run.start();
+    return true;
   }
 
   public static double getLeastDistance() {
@@ -104,6 +120,21 @@ public class ShippingSystemController {
   }
 
   public void updateView() {
+    while (!DeliveryTruck.runThreadIsExecuted) {
+      System.out.println("thread executed " + DeliveryTruck.runThreadIsExecuted);
+
+      try {
+        Thread.sleep(10 * 100);
+      } catch (InterruptedException e) {
+        e.printStackTrace();
+      }
+
+      if (DeliveryTruck.runThreadIsExecuted) {
+        DeliveryTruck.inputCommandSCS = "";
+        DeliveryTruck.runThreadIsStarted = false;
+        DeliveryTruck.isRunning = false;
+      }
+    }
     this.view.printInfo(forkliftTrucks, containerTrucks, deliveryTrucks);
   }
 }
