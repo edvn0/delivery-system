@@ -11,18 +11,14 @@ public class ShippingSystem {
   private ArrayList<ContainerTruck> containers;
   private ArrayList<DeliveryTruck> deliveries;
 
-  public ShippingSystem() {
+  ShippingSystem() {
+    // TODO full integration with FT and CT.
     forklifts = new ArrayList<>();
-    forklifts.add(new ForkliftTruck("First FT", 1));
-    forklifts.add(new ForkliftTruck("Second FT", 2));
-
     containers = new ArrayList<>();
-    containers.add(new ContainerTruck("First CT", 1));
-    containers.add(new ContainerTruck("Second CT", 2));
 
+    // Here we init all dt:s, I presume there will be only one though.
     deliveries = new ArrayList<>();
-    deliveries.add(new DeliveryTruck("First DT", 1));
-    deliveries.add(new DeliveryTruck("Second DT", 2));
+    deliveries.add(new DeliveryTruck("Delivery Truck One", 1));
   }
 
   public ArrayList<ForkliftTruck> getForklifts() {

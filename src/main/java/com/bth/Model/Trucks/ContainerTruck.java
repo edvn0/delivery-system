@@ -2,11 +2,8 @@ package com.bth.Model.Trucks;
 
 import com.bth.Model.Truck;
 import com.bth.Model.TruckColourEnum;
-import java.util.Vector;
 
 public class ContainerTruck implements Truck {
-
-  private Vector<Double> position;
 
   private String name;
   private int colorForLines;
@@ -50,11 +47,6 @@ public class ContainerTruck implements Truck {
   @Override
   public String toString() {
     return "Container Truck \"" + this.name + "\"\n";
-  }
-
-  @Override
-  public Vector<Double> getPosition() {
-    return this.position;
   }
 
   @Override

@@ -12,18 +12,19 @@ public class ShippingSystemMain {
           shippingSystem.getForklifts(),
           shippingSystem.getContainers(),
           shippingSystem.getDeliveries());
+
       ShippingSystemController controller = new ShippingSystemController(
-          shippingSystem.getForklifts(),
-          shippingSystem.getContainers(),
-          shippingSystem.getDeliveries(),
           view);
 
+      controller.getDeliveryTruck("Delivery Truck One", 1).initalizeMotors();
+      controller.getDeliveryTruck("Delivery Truck One", 1).initalizeSensors();
+
+      controller
+          .initalizeRunThread(controller.getDeliveryTruck("Delivery Truck One", 1).getRunThread(),
+              1);
+
       controller.updateView();
 
-      controller.getForkliftTruck("First FT", 1).setName("Edwins FT");
-      controller.getDeliveryTruck("First DT", 1).setName("Cajsas DT");
-
-      controller.updateView();
     });
   }
 
