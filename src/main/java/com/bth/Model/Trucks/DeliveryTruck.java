@@ -120,13 +120,20 @@ public class DeliveryTruck implements Truck {
     return this.runnable;
   }
 
-  public void initalizeMotors() {
+  public void initializeMotors() {
     motorDrive = new EV3MediumRegulatedMotor(MotorPort.B);
     motorSteer = new EV3MediumRegulatedMotor(MotorPort.C);
+
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      System.out.println("Emergency Stop");
+      motorDrive.stop();
+      motorSteer.stop();
+    }));
   }
 
-  public void initalizeSensors() {
+  public void initializeSensors() {
     lineReader = new LineReaderV2(SensorPort.S3);
+    sensorProximity = new EV3UltrasonicSensor(SensorPort.S1);
   }
 
 }
