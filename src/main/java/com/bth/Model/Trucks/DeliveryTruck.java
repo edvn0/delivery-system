@@ -2,6 +2,7 @@ package com.bth.Model.Trucks;
 
 import com.bth.Model.Truck;
 import com.bth.Model.TruckColourEnum;
+
 import java.util.Vector;
 
 public class DeliveryTruck implements Truck {
@@ -19,6 +20,7 @@ public class DeliveryTruck implements Truck {
   }
 
 
+  //TODO: Change speed, steering.
   @Override
   public void move(int dir) {
   }
