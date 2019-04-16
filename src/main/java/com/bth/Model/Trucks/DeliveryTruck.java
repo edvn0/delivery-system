@@ -23,11 +23,15 @@ public class DeliveryTruck implements Truck {
   //TODO: Change speed, steering.
   @Override
   public void move(int dir) {
+    switch (dir) {
+
+    }
   }
 
   @Override
   public void stop() {
   }
+
   @Override
   public void craneStart() {
 
@@ -37,6 +41,7 @@ public class DeliveryTruck implements Truck {
   public void craneStop() {
 
   }
+
   @Override
   public boolean readInfo(int barcode) {
     return false;
