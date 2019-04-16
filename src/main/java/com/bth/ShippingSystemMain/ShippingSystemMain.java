@@ -16,8 +16,8 @@ public class ShippingSystemMain {
       ShippingSystemController controller = new ShippingSystemController(
           view);
 
-      controller.getDeliveryTruck("Delivery Truck One", 1).initalizeMotors();
-      controller.getDeliveryTruck("Delivery Truck One", 1).initalizeSensors();
+      controller.getDeliveryTruck("Delivery Truck One", 1).initializeMotors();
+      controller.getDeliveryTruck("Delivery Truck One", 1).initializeSensors();
 
       controller
           .initalizeRunThread(controller.getDeliveryTruck("Delivery Truck One", 1).getRunThread(),
