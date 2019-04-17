@@ -1,15 +1,17 @@
 package com.bth.Model;
 
+import java.awt.Color;
+
 public enum TruckColourEnum {
-  BLUE(1), GREEN(2), RED(3);
+  BLUE(Color.BLUE), GREEN(Color.GREEN), RED(Color.RED);
 
-  int id;
+  int color;
 
-  TruckColourEnum(int id) {
-    this.id = id;
+  TruckColourEnum(Color color) {
+    this.color = color.getRGB();
   }
 
-  public int colorId() {
-    return id;
+  public int getColor() {
+    return color;
   }
 }

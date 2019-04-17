@@ -13,6 +13,7 @@ public class ShippingSystemMain {
 
   private static void run() {
     DeliveryTruck truck = new DeliveryTruck("Delivery Truck One", 1);
+
     ShippingSystem shippingSystem = new ShippingSystem();
     ShippingSystemView view = new ShippingSystemView(
         shippingSystem.getForklifts(),
@@ -20,16 +21,22 @@ public class ShippingSystemMain {
         shippingSystem.getDeliveries());
     ShippingSystemController controller = new ShippingSystemController(view, truck);
 
-    controller.initalizeRunThread(1);
+    System.out.println(controller.getDeliveryTruck().toString());
+
+    /*controller.getDeliveryTruck().initializeMotors();
+    controller.getDeliveryTruck().initializeSensors();
+    controller.initalizeRunThread("Main Thread");*/
 
     // Pooled Server initialisation
     controller.setPooledServer(new DTThreadPooledServer("ServerThread-1", 8000));
     controller.getPooledServer().start();
-    // DT initialisation
-    controller.getDeliveryTruck().initializeMotors();
-    controller.getDeliveryTruck().initializeSensors();
+    controller.runPooledServer(controller.getPooledServer());
 
-    controller.runPooledServer();
+    // DT initialisation
+    /*controller.getDeliveryTruck().setSpeed(100);
+    controller.getDeliveryTruck().move(1);
+    controller.getDeliveryTruck().readLines(controller.getDeliveryTruck().getColor());*/
+
     controller.updateView();
   }
 }

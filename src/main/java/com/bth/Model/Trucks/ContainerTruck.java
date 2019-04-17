@@ -11,7 +11,7 @@ public class ContainerTruck extends Truck {
 
   public ContainerTruck(String name, int id) {
     this.name = name;
-    this.colorForLines = TruckColourEnum.GREEN.colorId();
+    this.colorForLines = TruckColourEnum.GREEN.getColor();
     this.id = id;
   }
 

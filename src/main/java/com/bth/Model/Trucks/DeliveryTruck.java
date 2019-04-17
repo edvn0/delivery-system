@@ -9,6 +9,7 @@ import ev3dev.sensors.ev3.EV3TouchSensor;
 import ev3dev.sensors.ev3.EV3UltrasonicSensor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.SensorPort;
+import lejos.utility.Delay;
 
 public class DeliveryTruck extends Truck {
 
@@ -44,7 +45,7 @@ public class DeliveryTruck extends Truck {
 
   public DeliveryTruck(String name, int id) {
     this.name = name;
-    this.colorForLines = TruckColourEnum.RED.colorId();
+    this.colorForLines = TruckColourEnum.RED.getColor();
     this.id = id;
   }
 
@@ -54,9 +55,30 @@ public class DeliveryTruck extends Truck {
     if (super.checkBattery()) {
       switch (dir) {
         case 0:
+          this.motorDrive.setSpeed(this.speed);
+          // this.motorSteer.rotate(0);
+          this.motorDrive.backward();
+          break;
         case 1:
+          this.motorDrive.setSpeed(this.speed);
+          Delay.msDelay(500);
+          // this.motorSteer.rotate(0);
+          this.motorDrive.backward();
+          Delay.msDelay(1300);
+          this.motorDrive.stop();
+          break;
         case 2:
+          this.motorDrive.stop();
+          this.motorDrive.setSpeed(this.speed);
+          this.motorSteer.rotate(180);
+          this.motorDrive.forward();
+          break;
         case 3:
+          this.motorDrive.stop();
+          this.motorDrive.setSpeed(this.speed);
+          this.motorSteer.rotate(-90);
+          this.motorDrive.forward();
+          break;
         default:
           break;
       }
@@ -84,6 +106,13 @@ public class DeliveryTruck extends Truck {
 
   @Override
   public void readLines(int color) {
+    if (this.lineReader != null) {
+      // TODO: implementation.
+      lineReader.wake();
+
+      int[] values = lineReader.getCALValues();
+
+    }
 
   }
 
@@ -107,8 +136,8 @@ public class DeliveryTruck extends Truck {
   }
 
   public void initializeMotors() {
-    motorDrive = new EV3MediumRegulatedMotor(MotorPort.B);
-    motorSteer = new EV3MediumRegulatedMotor(MotorPort.C);
+    motorDrive = new EV3MediumRegulatedMotor(MotorPort.C);
+    motorSteer = new EV3MediumRegulatedMotor(MotorPort.D);
 
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       System.out.println("Emergency Stop");
@@ -128,5 +157,9 @@ public class DeliveryTruck extends Truck {
 
   public void setSpeed(int speed) {
     this.speed = speed;
+  }
+
+  public int getColor() {
+    return this.colorForLines;
   }
 }

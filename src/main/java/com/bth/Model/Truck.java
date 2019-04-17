@@ -6,7 +6,7 @@ import ev3dev.sensors.Battery;
 public abstract class Truck {
 
   private static int HALF_SECOND = 500;
-  public static double minVoltage = 7.200d;
+  public static double minVoltage = 7.100d;
 
   //Synchronization variables between threads to allow intra thread communication
   //Main variable for stopping execution
@@ -49,7 +49,7 @@ public abstract class Truck {
 
   /***
    * Checks floor for lines
-   * @param color color of the lines. Is associated with type of truck.
+   * @param color of the lines. Is associated with type of truck.
    */
   public abstract void readLines(int color);
 
@@ -61,7 +61,7 @@ public abstract class Truck {
     System.out.println("Battery Voltage: " + Battery.getInstance().getVoltage());
     System.out.println("Battery Current: " + Battery.getInstance().getBatteryCurrent());
     if (Battery.getInstance().getVoltage() < DeliveryTruck.minVoltage) {
-      System.out.println("Battery voltage to low, shutdown");
+      System.out.println("Battery voltage too low, shutdown");
       System.out.println("Please change the batteries");
       System.exit(0);
       return false;

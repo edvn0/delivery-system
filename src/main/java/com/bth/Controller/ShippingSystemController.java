@@ -40,19 +40,21 @@ public class ShippingSystemController {
     this.forkliftTrucks = null;
   }
 
-  public boolean initalizeRunThread(int id) {
+  public boolean initalizeRunThread(String id) {
     DeliveryTruckRunnable run;
     run = new DeliveryTruckRunnable(id);
-    Truck.runThreadIsExecuted = true;
-    Truck.runThreadIsStarted = true;
+
     run.setTruck(truck);
     run.start();
+    Truck.runThreadIsStarted = true;
+    Truck.runThreadIsExecuted = false;
     return true;
   }
 
   public void updateView() {
+    System.out.println("DO STUFF");
+
     while (!DeliveryTruck.runThreadIsExecuted) {
-      System.out.println("thread executed " + DeliveryTruck.runThreadIsExecuted);
 
       try {
         Thread.sleep(10 * 100);
@@ -66,26 +68,25 @@ public class ShippingSystemController {
         DeliveryTruck.isRunning = false;
       }
     }
-    this.view.printInfo(forkliftTrucks, containerTrucks, deliveryTrucks);
   }
 
   public void setPooledServer(DTThreadPooledServer dtThreadPooledServer) {
     this.pooledServer = dtThreadPooledServer;
   }
 
-  public void runPooledServer() {
+  public void runPooledServer(DTThreadPooledServer pooledServer) {
     while (Truck.isRunning) {
       if (Truck.inputCommandSCS.equals("KILL")) {
         Truck.isRunning = false;
       }
 
       if (Truck.inputCommandSCS.equals("RUN") && (!Truck.runThreadIsStarted)) {
-        initalizeRunThread(1);
+        initalizeRunThread("RUN Thread");
       }
 
       if (!Truck.runThreadIsExecuted) {
         try {
-          Thread.sleep(10 * 100);
+          Thread.sleep(30 * 100);
         } catch (InterruptedException e) {
           e.printStackTrace();
         }
@@ -131,18 +132,6 @@ public class ShippingSystemController {
     this.deliveryTrucks = deliveryTrucks;
   }
 
-  public void setView(ShippingSystemView view) {
-    this.view = view;
-  }
-
-  public ShippingSystemView getView() {
-    return view;
-  }
-
-  public static double getLeastDistance() {
-    return leastDistance;
-  }
-
   public ArrayList<ForkliftTruck> getForkliftTrucks() {
     return forkliftTrucks;
   }
@@ -153,6 +142,18 @@ public class ShippingSystemController {
 
   public ArrayList<DeliveryTruck> getDeliveryTrucks() {
     return deliveryTrucks;
+  }
+
+  public void setView(ShippingSystemView view) {
+    this.view = view;
+  }
+
+  public ShippingSystemView getView() {
+    return view;
+  }
+
+  public static double getLeastDistance() {
+    return leastDistance;
   }
 
   public ForkliftTruck getForkliftTruck(String name, int id) {
@@ -172,4 +173,5 @@ public class ShippingSystemController {
     }
     return null;
   }
+
 }

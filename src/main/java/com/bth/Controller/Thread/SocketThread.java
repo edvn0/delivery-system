@@ -97,29 +97,41 @@ public class SocketThread extends Thread {
         e.printStackTrace();
       }
 
-      switch (line) {
-        case "RUN":
-          Truck.inputCommandSCS = line;
-          break;
-        case "LEFT-PRESS":
-          Truck.inputCommandSCS = line;
-          break;
-        case "STOP":
-          Truck.inputCommandSCS = line;
-          Truck.runThreadIsExecuted = true;
-          break;
-        case "KILL":
-          Truck.inputCommandSCS = line;
-          Truck.isRunning = false;
-          break;
-      }
+      if (line != null) {
+        String split =
+            line.equals(" ") || line.equals("") ? "null"
+                : line.split(" ")[1].substring(1);
 
-      System.out.println("Request processed: " + time);
-      try {
-        Thread.sleep(100);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
+        System.out.println("*------------------------------------------------------------------*");
+        System.out.println("Input command:" + split);
+        System.out.println("*------------------------------------------------------------------*");
+
+        System.out.println(line);
+        switch (line) {
+          case "RUN":
+            Truck.inputCommandSCS = line;
+            break;
+          case "LEFT-PRESS":
+            Truck.inputCommandSCS = line;
+            break;
+          case "STOP":
+            Truck.inputCommandSCS = line;
+            Truck.runThreadIsExecuted = true;
+            break;
+          case "KILL":
+            Truck.inputCommandSCS = line;
+            Truck.isRunning = false;
+            Truck.runThreadIsExecuted = true;
+            break;
+        }
       }
+    }
+
+    System.out.println("Request processed: " + time);
+    try {
+      Thread.sleep(100);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
 
     try {

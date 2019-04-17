@@ -11,7 +11,7 @@ public class ForkliftTruck extends Truck {
 
   public ForkliftTruck(String name, int id) {
     this.name = name;
-    this.colorForLines = TruckColourEnum.BLUE.colorId();
+    this.colorForLines = TruckColourEnum.BLUE.getColor();
     this.id = id;
   }
 
