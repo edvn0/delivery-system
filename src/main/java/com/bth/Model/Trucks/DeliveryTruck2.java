@@ -7,6 +7,7 @@ import ev3dev.actuators.lego.motors.EV3MediumRegulatedMotor;
 import ev3dev.sensors.ev3.EV3TouchSensor;
 import ev3dev.sensors.ev3.EV3UltrasonicSensor;
 import lejos.hardware.port.Port;
+import lejos.utility.Delay;
 
 import java.util.HashMap;
 
@@ -45,6 +46,7 @@ public class DeliveryTruck2 extends Truck {
     this.id = id;
 
     this.speeds = new HashMap<>();
+      initSpeeds(new double[]{100, 1300, 100, 1100});
 
     System.out.println(this.speeds);
   }
@@ -59,8 +61,16 @@ public class DeliveryTruck2 extends Truck {
             System.out.println("DSometqagahfwadwad");
         case 1:
           //Back up
+            double speed = this.speeds.get(Truck.ports[3]);
+            this.setMotorDriveSpeed(speed);
+            Delay.msDelay(HALF_SECOND);
+            motorDrive.backward();
+            Delay.msDelay(2500);
+            this.stop();
+            break;
         case 2:
           //Turn Right
+
         case 3:
           //Turn Left
       }
@@ -69,7 +79,7 @@ public class DeliveryTruck2 extends Truck {
 
   @Override
   protected void stop() {
-
+      motorDrive.stop();
   }
 
   @Override
@@ -102,6 +112,10 @@ public class DeliveryTruck2 extends Truck {
   public void setSpeed(Port p, double speed) {
     this.speeds.replace(p, speed);
   }
+
+    private void setMotorDriveSpeed(double speed) {
+        this.motorDrive.setSpeed((int) speed);
+    }
 
   @Override
   public String getName() {
