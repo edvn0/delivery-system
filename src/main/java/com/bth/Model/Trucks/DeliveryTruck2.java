@@ -58,7 +58,14 @@ public class DeliveryTruck2 extends Truck {
       switch (dir) {
         case 0:
           //Move Forward
-            System.out.println("DSometqagahfwadwad");
+
+            double speed = this.speeds.get(Truck.ports[3]);
+            this.setMotorDriveSpeed(speed);
+            Delay.msDelay(HALF_SECOND);
+            motorDrive.forward();
+            Delay.msDelay(HALF_SECOND);
+            this.stop();
+            break;
         case 1:
           //Back up
             double speed = this.speeds.get(Truck.ports[3]);
