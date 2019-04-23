@@ -8,6 +8,7 @@ import ev3dev.actuators.lego.motors.EV3MediumRegulatedMotor;
 import ev3dev.sensors.ev3.EV3TouchSensor;
 import ev3dev.sensors.ev3.EV3UltrasonicSensor;
 import lejos.hardware.port.MotorPort;
+import lejos.hardware.port.Port;
 import lejos.hardware.port.SensorPort;
 import lejos.utility.Delay;
 
@@ -136,6 +137,7 @@ public class DeliveryTruck extends Truck {
   }
 
   public void initializeMotors() {
+    // FIXME: this might change with the ports diffing.
     motorDrive = new EV3MediumRegulatedMotor(MotorPort.C);
     motorSteer = new EV3MediumRegulatedMotor(MotorPort.D);
 
@@ -155,7 +157,7 @@ public class DeliveryTruck extends Truck {
     return speed;
   }
 
-  public void setSpeed(int speed) {
+  public void setSpeed(Port p, int speed) {
     this.speed = speed;
   }
 

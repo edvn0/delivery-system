@@ -2,10 +2,12 @@ package com.bth.Model;
 
 import com.bth.Model.Trucks.DeliveryTruck;
 import ev3dev.sensors.Battery;
+import lejos.hardware.port.MotorPort;
+import lejos.hardware.port.Port;
 
 public abstract class Truck {
 
-  private static int HALF_SECOND = 500;
+  public static int HALF_SECOND = 500;
   public static double minVoltage = 7.100d;
 
   //Synchronization variables between threads to allow intra thread communication
@@ -17,6 +19,8 @@ public abstract class Truck {
   //Variables for controlling task thread
   public static boolean runThreadIsStarted = false;
   public static boolean runThreadIsExecuted = false;
+
+  public static Port[] ports = {MotorPort.A, MotorPort.B, MotorPort.C, MotorPort.D};
 
   /***
    * Moves the truck in a direction,

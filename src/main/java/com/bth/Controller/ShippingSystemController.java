@@ -43,7 +43,6 @@ public class ShippingSystemController {
   public boolean initalizeRunThread(String id) {
     DeliveryTruckRunnable run;
     run = new DeliveryTruckRunnable(id);
-
     run.setTruck(truck);
     run.start();
     Truck.runThreadIsStarted = true;

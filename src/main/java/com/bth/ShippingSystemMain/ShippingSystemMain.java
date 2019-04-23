@@ -23,19 +23,19 @@ public class ShippingSystemMain {
 
     System.out.println(controller.getDeliveryTruck().toString());
 
-    /*controller.getDeliveryTruck().initializeMotors();
+    controller.getDeliveryTruck().initializeMotors();
     controller.getDeliveryTruck().initializeSensors();
-    controller.initalizeRunThread("Main Thread");*/
 
     // Pooled Server initialisation
+    controller.initalizeRunThread("Main Thread");
     controller.setPooledServer(new DTThreadPooledServer("ServerThread-1", 8000));
     controller.getPooledServer().start();
     controller.runPooledServer(controller.getPooledServer());
 
     // DT initialisation
-    /*controller.getDeliveryTruck().setSpeed(100);
+    controller.getDeliveryTruck().setSpeed(100);
     controller.getDeliveryTruck().move(1);
-    controller.getDeliveryTruck().readLines(controller.getDeliveryTruck().getColor());*/
+    controller.getDeliveryTruck().readLines(controller.getDeliveryTruck().getColor());
 
     controller.updateView();
   }
