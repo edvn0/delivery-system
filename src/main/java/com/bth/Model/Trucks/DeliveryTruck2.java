@@ -56,6 +56,7 @@ public class DeliveryTruck2 extends Truck {
       switch (dir) {
         case 0:
           //Move Forward
+            System.out.println("DSometqagahfwadwad");
         case 1:
           //Back up
         case 2:
