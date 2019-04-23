@@ -68,8 +68,16 @@ public class DeliveryTruck2 extends Truck {
             break;
         case 1:
           //Back up
+            double speed = this.speeds.get(Truck.ports[3]);
+            this.setMotorDriveSpeed(speed);
+            Delay.msDelay(HALF_SECOND);
+            motorDrive.backward();
+            Delay.msDelay(2500);
+            this.stop();
+            break;
         case 2:
           //Turn Right
+
         case 3:
           //Turn Left
       }
@@ -113,9 +121,7 @@ public class DeliveryTruck2 extends Truck {
   }
 
     private void setMotorDriveSpeed(double speed) {
-
         this.motorDrive.setSpeed((int) speed);
-
     }
 
   @Override
