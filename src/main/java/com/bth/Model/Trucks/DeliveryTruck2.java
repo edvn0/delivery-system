@@ -44,14 +44,13 @@ public class DeliveryTruck2 extends Truck {
     this.id = id;
 
     this.speeds = new HashMap<>();
-    initSpeeds(new double[]{100, 1100, 200, 1300});
 
     System.out.println(this.speeds);
   }
 
   @Override
   public void move(int dir) {
-    boolean checkBattery = super.checkBattery();
+    boolean checkBattery = this.checkBattery();
     if (checkBattery) {
       switch (dir) {
         case 0:
