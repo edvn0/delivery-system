@@ -1,6 +1,6 @@
 package com.bth.Controller.Thread;
 
-import com.bth.Model.Trucks.DeliveryTruck;
+import com.bth.Model.Truck;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.IOException;
@@ -50,14 +50,14 @@ public class SocketThread extends Thread {
   }
 
   public void isRunningWR() {
-    if (DeliveryTruck.outputCommandSCS.equals("FINISHED")) {
+    if (Truck.outputCommandSCS.equals("FINISHED")) {
 
       System.out.println("worker-FINISHED");
 
       try {
-        writer.write(DeliveryTruck.outputCommandSCS + "\n");
+        writer.write(Truck.outputCommandSCS + "\n");
         writer.flush();
-        DeliveryTruck.outputCommandSCS = "none";
+        Truck.outputCommandSCS = "none";
       } catch (IOException e) {
         e.printStackTrace();
       }
@@ -80,14 +80,14 @@ public class SocketThread extends Thread {
     long time = System.currentTimeMillis();
 
     String line = null;
-    while (DeliveryTruck.isRunning) {
+    while (Truck.isRunning) {
 
       System.out.println("worker running");
 
-      if (DeliveryTruck.outputCommandSCS.equals("FINISHED")) {
+      if (Truck.outputCommandSCS.equals("FINISHED")) {
 
         System.out.println("worker-FINISHED");
-        DeliveryTruck.outputCommandSCS = "none";
+        Truck.outputCommandSCS = "none";
       }
 
       try {
@@ -97,29 +97,31 @@ public class SocketThread extends Thread {
         e.printStackTrace();
       }
 
+      System.out.println(line);
       switch (line) {
         case "RUN":
-          DeliveryTruck.inputCommandSCS = line;
+          Truck.inputCommandSCS = line;
           break;
         case "LEFT-PRESS":
-          DeliveryTruck.inputCommandSCS = line;
+          Truck.inputCommandSCS = line;
           break;
         case "STOP":
-          DeliveryTruck.inputCommandSCS = line;
-          DeliveryTruck.runThreadIsExecuted = true;
+          Truck.inputCommandSCS = line;
+          Truck.runThreadIsExecuted = true;
           break;
         case "KILL":
-          DeliveryTruck.inputCommandSCS = line;
-          DeliveryTruck.isRunning = false;
+          Truck.inputCommandSCS = line;
+          Truck.isRunning = false;
+          Truck.runThreadIsExecuted = true;
           break;
       }
+    }
 
-      System.out.println("Request processed: " + time);
-      try {
-        Thread.sleep(100);
-      } catch (InterruptedException e) {
-        e.printStackTrace();
-      }
+    System.out.println("Request processed: " + time);
+    try {
+      Thread.sleep(100);
+    } catch (InterruptedException e) {
+      e.printStackTrace();
     }
 
     try {

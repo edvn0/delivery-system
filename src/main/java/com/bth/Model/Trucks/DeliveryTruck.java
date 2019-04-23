@@ -1,6 +1,5 @@
 package com.bth.Model.Trucks;
 
-import com.bth.Controller.DeliveryThread.DeliveryTruckRunnable;
 import com.bth.Model.Sensors.LineReaderV2;
 import com.bth.Model.Truck;
 import com.bth.Model.TruckColourEnum;
@@ -10,65 +9,78 @@ import ev3dev.sensors.ev3.EV3TouchSensor;
 import ev3dev.sensors.ev3.EV3UltrasonicSensor;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.SensorPort;
+import lejos.utility.Delay;
 
-public class DeliveryTruck implements Truck {
+public class DeliveryTruck extends Truck {
 
   /**
    * START CONFIG
    */
-  private static int HALF_SECOND = 500;
-  public static double minVoltage = 7.200d;
-
-  //Synchronization variables between threads to allow intra thread communication
-  //Main variable for stopping execution
-  public static boolean isRunning = true;
-  //Variables for commands from/to SCS
-  public static String inputCommandSCS = "";
-  public static String outputCommandSCS = "none";
-  //Variables for controlling task thread
-  public static boolean runThreadIsStarted = false;
-  public static boolean runThreadIsExecuted = false;
-
   //motor for drive forwards and backwards - connected to motor port D
-  public static EV3MediumRegulatedMotor motorDrive;
+  public EV3MediumRegulatedMotor motorDrive;
   //motor for steering - connected to motor port C
-  public static EV3MediumRegulatedMotor motorSteer;
+  public EV3MediumRegulatedMotor motorSteer;
 
   //motor for crane lifting - connected multiplexer port M1
-  private static EV3LargeRegulatedMotor craneRotation;
+  private EV3LargeRegulatedMotor craneRotation;
   //motor for crane lifting - connected to motor port B
-  public static EV3MediumRegulatedMotor craneLift;
+  public EV3MediumRegulatedMotor craneLift;
   //motor for grabber - connected to motor port A
-  public static EV3MediumRegulatedMotor craneGrabber;
+  public EV3MediumRegulatedMotor craneGrabber;
 
   //sensor for proximity - connect to sensor port S1
-  public static EV3UltrasonicSensor sensorProximity;
+  private EV3UltrasonicSensor sensorProximity;
   //sensor for line reading - connected to sensor port S3
-  public static LineReaderV2 lineReader;
+  private LineReaderV2 lineReader;
   //sensor for crane rotation movement detection S4
-  public static EV3TouchSensor touchSensor;
+  public EV3TouchSensor touchSensor;
   /**
    * END CONFIG
    */
 
-  private DeliveryTruckRunnable runnable;
   private String name;
   private int colorForLines;
   private int id;
+  private int speed;
 
   public DeliveryTruck(String name, int id) {
     this.name = name;
-    this.colorForLines = TruckColourEnum.RED.colorId();
+    this.colorForLines = TruckColourEnum.RED.getColor();
     this.id = id;
   }
 
 
   @Override
   public void move(int dir) {
-    boolean checkBattery = this.checkBattery();
-    if (checkBattery) {
+    if (super.checkBattery()) {
       switch (dir) {
-
+        case 0:
+          this.motorDrive.setSpeed(this.speed);
+          // this.motorSteer.rotate(0);
+          this.motorDrive.backward();
+          break;
+        case 1:
+          this.motorDrive.setSpeed(this.speed);
+          Delay.msDelay(500);
+          // this.motorSteer.rotate(0);
+          this.motorDrive.backward();
+          Delay.msDelay(1300);
+          this.motorDrive.stop();
+          break;
+        case 2:
+          this.motorDrive.stop();
+          this.motorDrive.setSpeed(this.speed);
+          this.motorSteer.rotate(180);
+          this.motorDrive.forward();
+          break;
+        case 3:
+          this.motorDrive.stop();
+          this.motorDrive.setSpeed(this.speed);
+          this.motorSteer.rotate(-90);
+          this.motorDrive.forward();
+          break;
+        default:
+          break;
       }
     }
   }
@@ -94,6 +106,13 @@ public class DeliveryTruck implements Truck {
 
   @Override
   public void readLines(int color) {
+    if (this.lineReader != null) {
+      // TODO: implementation.
+      lineReader.wake();
+
+      int[] values = lineReader.getCALValues();
+
+    }
 
   }
 
@@ -116,13 +135,10 @@ public class DeliveryTruck implements Truck {
     this.name = name;
   }
 
-  public DeliveryTruckRunnable getRunThread() {
-    return this.runnable;
-  }
-
   public void initializeMotors() {
-    motorDrive = new EV3MediumRegulatedMotor(MotorPort.B);
-    motorSteer = new EV3MediumRegulatedMotor(MotorPort.C);
+    // FIXME: this might change with the ports diffing.
+    motorDrive = new EV3MediumRegulatedMotor(MotorPort.C);
+    motorSteer = new EV3MediumRegulatedMotor(MotorPort.D);
 
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       System.out.println("Emergency Stop");
@@ -136,4 +152,15 @@ public class DeliveryTruck implements Truck {
     sensorProximity = new EV3UltrasonicSensor(SensorPort.S1);
   }
 
+  public int getSpeed() {
+    return speed;
+  }
+
+  public void setSpeed(int speed) {
+    this.speed = speed;
+  }
+
+  public int getColor() {
+    return this.colorForLines;
+  }
 }

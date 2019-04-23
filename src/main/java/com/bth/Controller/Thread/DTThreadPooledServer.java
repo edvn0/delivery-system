@@ -1,6 +1,6 @@
 package com.bth.Controller.Thread;
 
-import com.bth.Model.Trucks.DeliveryTruck;
+import com.bth.Model.Truck;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
@@ -20,17 +20,13 @@ import java.util.concurrent.Executors;
 
 public class DTThreadPooledServer extends Thread {
 
-  protected int serverPort = 8000;
+  protected int serverPort;
   protected ServerSocket serverSocket = null;
   protected boolean isStopped = false;
   protected Thread runningThread = null;
   protected ExecutorService threadPool = Executors.newFixedThreadPool(10);
   protected SocketThread socket;
   private String threadName;
-
-  public DTThreadPooledServer(String name) {
-    this.threadName = name;
-  }
 
   public DTThreadPooledServer(String name, int port) {
     this.threadName = name;
@@ -59,7 +55,7 @@ public class DTThreadPooledServer extends Thread {
         throw new RuntimeException(
             "Error accepting client connection", e);
       }
-      System.out.println("WorkerRunnable" + i);
+      System.out.println("WorkerRunnable: " + i);
       i++;
 
       socket = new SocketThread(clientSocket, "DT-SCS socket");
@@ -76,7 +72,7 @@ public class DTThreadPooledServer extends Thread {
   }
 
   public void isRunning() {
-    if (DeliveryTruck.outputCommandSCS.equals("FINISHED")) {
+    if (Truck.outputCommandSCS.equals("FINISHED")) {
       socket.isRunningWR();
     }
   }

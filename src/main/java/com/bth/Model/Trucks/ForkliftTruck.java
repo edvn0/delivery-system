@@ -3,7 +3,7 @@ package com.bth.Model.Trucks;
 import com.bth.Model.Truck;
 import com.bth.Model.TruckColourEnum;
 
-public class ForkliftTruck implements Truck {
+public class ForkliftTruck extends Truck {
 
   private String name;
   private int colorForLines;
@@ -11,7 +11,7 @@ public class ForkliftTruck implements Truck {
 
   public ForkliftTruck(String name, int id) {
     this.name = name;
-    this.colorForLines = TruckColourEnum.BLUE.colorId();
+    this.colorForLines = TruckColourEnum.BLUE.getColor();
     this.id = id;
   }
 

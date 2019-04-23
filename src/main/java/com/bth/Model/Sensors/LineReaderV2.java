@@ -100,7 +100,7 @@ public class LineReaderV2 extends BaseSensor {
    *
    * @return return array of values from individual IR lights (0 - 7)
    */
-  public int[] getCALalues() {
+  public int[] getCALValues() {
     int lightArrayLength = 8;
     int[] intArray = new int[lightArrayLength];
     this.setMode("CAL");
@@ -167,10 +167,10 @@ public class LineReaderV2 extends BaseSensor {
     this.sendCommand("CAL-BLACK");
   }
 
-  /**
-   * param: color: line color
-   */
 
+  /**
+   * @param color: line color
+   */
   public void invertColor(String color) {
     if (color.equals("black")) {
       this.sendCommand("RST-COL");
