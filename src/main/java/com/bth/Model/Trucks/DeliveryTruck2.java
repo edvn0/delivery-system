@@ -6,8 +6,9 @@ import ev3dev.actuators.lego.motors.EV3LargeRegulatedMotor;
 import ev3dev.actuators.lego.motors.EV3MediumRegulatedMotor;
 import ev3dev.sensors.ev3.EV3TouchSensor;
 import ev3dev.sensors.ev3.EV3UltrasonicSensor;
-import java.util.HashMap;
 import lejos.hardware.port.Port;
+
+import java.util.HashMap;
 
 public class DeliveryTruck2 extends Truck {
 
@@ -54,11 +55,14 @@ public class DeliveryTruck2 extends Truck {
     if (checkBattery) {
       switch (dir) {
         case 0:
+          //Move Forward
+            System.out.println("DSometqagahfwadwad");
         case 1:
+          //Back up
         case 2:
+          //Turn Right
         case 3:
-        case 4:
-        case 5:
+          //Turn Left
       }
     }
   }
