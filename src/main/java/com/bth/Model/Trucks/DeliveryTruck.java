@@ -2,20 +2,16 @@ package com.bth.Model.Trucks;
 
 import com.bth.Model.Sensors.LineReaderV2;
 import com.bth.Model.Truck;
-import com.bth.Model.TruckColourEnum;
 import ev3dev.actuators.lego.motors.EV3LargeRegulatedMotor;
 import ev3dev.actuators.lego.motors.EV3MediumRegulatedMotor;
 import ev3dev.sensors.ev3.EV3TouchSensor;
 import ev3dev.sensors.ev3.EV3UltrasonicSensor;
-import lejos.hardware.port.MotorPort;
-import lejos.hardware.port.SensorPort;
+import java.util.HashMap;
+import lejos.hardware.port.Port;
 import lejos.utility.Delay;
 
 public class DeliveryTruck extends Truck {
 
-  /**
-   * START CONFIG
-   */
   //motor for drive forwards and backwards - connected to motor port D
   public EV3MediumRegulatedMotor motorDrive;
   //motor for steering - connected to motor port C
@@ -34,59 +30,142 @@ public class DeliveryTruck extends Truck {
   private LineReaderV2 lineReader;
   //sensor for crane rotation movement detection S4
   public EV3TouchSensor touchSensor;
-  /**
-   * END CONFIG
-   */
 
   private String name;
-  private int colorForLines;
   private int id;
-  private int speed;
+  private HashMap<Port, Double> speeds;
 
-  public DeliveryTruck(String name, int id) {
+  public DeliveryTruck(String name, int id, Port[] ports) {
+    motorDrive = new EV3MediumRegulatedMotor(ports[3]);   // PORT D
+    motorSteer = new EV3MediumRegulatedMotor(ports[2]);   // PORT C
+    lineReader = new LineReaderV2(ports[6]);   // PORT S3
+    sensorProximity = new EV3UltrasonicSensor(ports[4]);   // PORT S1
+
+    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
+      System.out.println("Emergency Stop");
+      motorDrive.stop();
+      motorSteer.stop();
+    }));
+
     this.name = name;
-    this.colorForLines = TruckColourEnum.RED.getColor();
     this.id = id;
-  }
 
+    this.speeds = initSpeeds(new double[]{100, 1300, 500, 500});
+  }
 
   @Override
   public void move(int dir) {
-    if (super.checkBattery()) {
+    boolean checkBattery = this.checkBattery();
+    if (checkBattery) {
       switch (dir) {
         case 0:
-          this.motorDrive.setSpeed(this.speed);
-          // this.motorSteer.rotate(0);
-          this.motorDrive.backward();
+          //Move Forward
+          double speedMotor = this.speeds.get(Truck.ports[3]);
+          this.setMotorDriveSpeed(speedMotor);
+          Delay.msDelay(HALF_SECOND);
+          motorDrive.forward();
+          Delay.msDelay(HALF_SECOND);
+          this.stop();
           break;
         case 1:
-          this.motorDrive.setSpeed(this.speed);
-          Delay.msDelay(500);
-          // this.motorSteer.rotate(0);
-          this.motorDrive.backward();
-          Delay.msDelay(1300);
-          this.motorDrive.stop();
+          //Back up
+          double speed = this.getSpeed(Truck.ports[3]);
+          this.setMotorDriveSpeed(speed);
+          Delay.msDelay(HALF_SECOND);
+          motorDrive.backward();
+          Delay.msDelay(2500);
+          this.stop();
           break;
+        /* This is for development only!
         case 2:
-          this.motorDrive.stop();
-          this.motorDrive.setSpeed(this.speed);
-          this.motorSteer.rotate(180);
-          this.motorDrive.forward();
+          System.out.println("Start case 2");
+
+          this.motorDrive.setSpeed(this.getSpeed(Truck.ports[3]));
+          Delay.msDelay(1500);
+
+          this.motorDrive.backward();
+          Delay.msDelay(10000);
+
+          System.out.println("Finished case 2!");
           break;
         case 3:
-          this.motorDrive.stop();
-          this.motorDrive.setSpeed(this.speed);
-          this.motorSteer.rotate(-90);
+          System.out.println("Start case 3");
+
+          this.motorDrive.setSpeed(500);
+          System.out.println(motorDrive.getSpeed());
+          Delay.msDelay(1500);
           this.motorDrive.forward();
+          Delay.msDelay(7500);
+          this.motorSteer.rotate(140, true);
+          Delay.msDelay(900);
+          this.motorSteer.forward();
+          Delay.msDelay(5000);
+          this.motorDrive.backward();
+          Delay.msDelay(10000);
+          this.motorDrive.stop();
+
+          System.out.println("Finished case 3!");
           break;
-        default:
+        case 4:
+          System.out.println("Start case 4");
+          this.motorSteer.setSpeed(200);
+          Delay.msDelay(800);
+
+          this.motorSteer.rotate(-140, true);
+          Delay.msDelay(900);
+
+          this.motorSteer.forward();
+          Delay.msDelay(5000);
+
+          this.motorDrive.setSpeed(500);
+          Delay.msDelay(1000);
+
+          // "Async" lol
+          long time = System.currentTimeMillis();
+          long end = time + 25000;
+          while (System.currentTimeMillis() < end) {
+            if (end - System.currentTimeMillis() < 12500) {
+              motorDrive.backward();
+            } else {
+              motorDrive.forward();
+            }
+          }
+          motorDrive.stop();
+
+          System.out.println("Finished case 4!");
+
           break;
+        case 5:
+          System.out.println("Start case 5");
+
+          this.motorSteer.setSpeed(240);
+          Delay.msDelay(1500);
+
+          this.motorSteer.rotate(140, true);
+          Delay.msDelay(3500);
+
+          this.motorSteer.stop();
+          System.out.println("Finished case 5!");
+          */
       }
     }
   }
 
+  // TODO: fix the integration with a localhost server.
+  public void doStuff(String theThing) {
+
+  }
+
+  private int getSpeed(Port port) {
+    return this.speeds.get(port).intValue();
+  }
+
   @Override
-  public void stop() {
+  protected void stop() {
+    motorDrive.stop();
+    Delay.msDelay(800);
+    motorSteer.stop();
+    Delay.msDelay(800);
   }
 
   @Override
@@ -106,61 +185,33 @@ public class DeliveryTruck extends Truck {
 
   @Override
   public void readLines(int color) {
-    if (this.lineReader != null) {
-      // TODO: implementation.
-      lineReader.wake();
-
-      int[] values = lineReader.getCALValues();
-
-    }
 
   }
 
-  @Override
-  public String toString() {
-    return "Delivery Truck \"" + this.name + "\"\n";
+  private HashMap<Port, Double> initSpeeds(double[] speeds) {
+    int k = 0;
+    HashMap<Port, Double> portHashMap = new HashMap<>();
+    for (double d : speeds) {
+      portHashMap.put(Truck.ports[k++], d);
+    }
+    return portHashMap;
+  }
+
+  public void setSpeed(Port p, double speed) {
+    this.speeds.replace(p, speed);
+  }
+
+  private void setMotorDriveSpeed(double speed) {
+    this.motorDrive.setSpeed((int) speed);
   }
 
   @Override
   public String getName() {
-    return this.name;
+    return name;
   }
 
   @Override
   public int getId() {
-    return this.id;
-  }
-
-  public void setName(String name) {
-    this.name = name;
-  }
-
-  public void initializeMotors() {
-    // FIXME: this might change with the ports diffing.
-    motorDrive = new EV3MediumRegulatedMotor(MotorPort.C);
-    motorSteer = new EV3MediumRegulatedMotor(MotorPort.D);
-
-    Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-      System.out.println("Emergency Stop");
-      motorDrive.stop();
-      motorSteer.stop();
-    }));
-  }
-
-  public void initializeSensors() {
-    lineReader = new LineReaderV2(SensorPort.S3);
-    sensorProximity = new EV3UltrasonicSensor(SensorPort.S1);
-  }
-
-  public int getSpeed() {
-    return speed;
-  }
-
-  public void setSpeed(int speed) {
-    this.speed = speed;
-  }
-
-  public int getColor() {
-    return this.colorForLines;
+    return id;
   }
 }

@@ -4,6 +4,7 @@ import com.bth.Model.Trucks.DeliveryTruck;
 import ev3dev.sensors.Battery;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
+import lejos.hardware.port.SensorPort;
 
 public abstract class Truck {
 
@@ -20,7 +21,8 @@ public abstract class Truck {
   public static boolean runThreadIsStarted = false;
   public static boolean runThreadIsExecuted = false;
 
-  public static Port[] ports = {MotorPort.A, MotorPort.B, MotorPort.C, MotorPort.D};
+  public static Port[] ports = {MotorPort.A, MotorPort.B, MotorPort.C, MotorPort.D, SensorPort.S1,
+      SensorPort.S2, SensorPort.S3, SensorPort.S4};
 
   /***
    * Moves the truck in a direction,

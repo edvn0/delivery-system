@@ -100,6 +100,8 @@ public class ShippingSystemController {
       }
 
     }
+
+    pooledServer.stopServerSocket();
   }
 
   public DTThreadPooledServer getPooledServer() {

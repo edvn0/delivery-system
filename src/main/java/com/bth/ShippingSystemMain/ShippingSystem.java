@@ -18,7 +18,6 @@ public class ShippingSystem {
 
     // Here we init all dt:s, I presume there will be only one though.
     deliveries = new ArrayList<>();
-    deliveries.add(new DeliveryTruck("Delivery Truck One", 1));
   }
 
   public ArrayList<ForkliftTruck> getForklifts() {
