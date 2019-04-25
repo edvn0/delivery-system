@@ -3,7 +3,6 @@ package com.bth.Model.Trucks;
 import com.bth.Controller.WebAPI.WebServer;
 import com.bth.Model.Sensors.LineReaderV2;
 import com.bth.Model.Truck;
-import com.bth.ShippingSystemMain.ShippingSystemMain;
 import ev3dev.actuators.lego.motors.EV3LargeRegulatedMotor;
 import ev3dev.actuators.lego.motors.EV3MediumRegulatedMotor;
 import ev3dev.sensors.ev3.EV3TouchSensor;
@@ -24,7 +23,7 @@ public class DeliveryTruck extends Truck {
   //motor for crane lifting - connected multiplexer port M1
   private EV3LargeRegulatedMotor craneRotation;
   //motor for crane lifting - connected to motor port B
-  public EV3MediumRegulatedMotor craneLift;
+  public EV3MediumRegulatedMotor extender;
   //motor for grabber - connected to motor port A
   public EV3MediumRegulatedMotor craneGrabber;
 
@@ -40,12 +39,11 @@ public class DeliveryTruck extends Truck {
   private HashMap<Port, Double> speeds;
 
   public DeliveryTruck(String name, int id) {
-    if (!ShippingSystemMain.DEV) {
-      motorDrive = new EV3MediumRegulatedMotor(Truck.motorPorts[3]);   // PORT D
-      motorSteer = new EV3MediumRegulatedMotor(Truck.motorPorts[2]);   // PORT C
-      lineReader = new LineReaderV2(Truck.sensorPorts[2]);   // PORT S3
-      sensorProximity = new EV3UltrasonicSensor(Truck.sensorPorts[0]);   // PORT S1
-    }
+
+    motorDrive = new EV3MediumRegulatedMotor(Truck.motorPorts[3]);   // PORT D
+    motorSteer = new EV3MediumRegulatedMotor(Truck.motorPorts[2]);   // PORT C
+    lineReader = new LineReaderV2(Truck.sensorPorts[2]);   // PORT S3
+    sensorProximity = new EV3UltrasonicSensor(Truck.sensorPorts[0]);   // PORT S1
 
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       System.out.println("Emergency Stop!");
@@ -88,7 +86,7 @@ public class DeliveryTruck extends Truck {
           Delay.msDelay(2500);
           this.stop();
           break;
-        /* This is for development only!
+        //This is for development only!
         case 2:
           System.out.println("Start case 2");
 
@@ -102,19 +100,6 @@ public class DeliveryTruck extends Truck {
           break;
         case 3:
           System.out.println("Start case 3");
-
-          this.motorDrive.setSpeed(500);
-          System.out.println(motorDrive.getSpeed());
-          Delay.msDelay(1500);
-          this.motorDrive.forward();
-          Delay.msDelay(7500);
-          this.motorSteer.rotate(140, true);
-          Delay.msDelay(900);
-          this.motorSteer.forward();
-          Delay.msDelay(5000);
-          this.motorDrive.backward();
-          Delay.msDelay(10000);
-          this.motorDrive.stop();
 
           System.out.println("Finished case 3!");
           break;
@@ -158,7 +143,6 @@ public class DeliveryTruck extends Truck {
 
           this.motorSteer.stop();
           System.out.println("Finished case 5!");
-          */
       }
     }
   }

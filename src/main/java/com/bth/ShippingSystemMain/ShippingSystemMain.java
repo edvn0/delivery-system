@@ -4,6 +4,7 @@ import com.bth.Controller.ShippingSystemController;
 import com.bth.Controller.Thread.DTThreadPooledServer;
 import com.bth.Model.Trucks.DeliveryTruck;
 import com.bth.View.ShippingSystemView;
+import lejos.utility.Delay;
 
 public class ShippingSystemMain {
 
@@ -29,18 +30,13 @@ public class ShippingSystemMain {
     controller.runPooledServer(controller.getPooledServer());
 
     // DT initialisation
-    /*controller.getDeliveryTruck().move(0);
-    Delay.msDelay(1000);
-    controller.getDeliveryTruck().move(1);
-    Delay.msDelay(1000);
-    controller.getDeliveryTruck().move(2);
-    Delay.msDelay(1000);
-    controller.getDeliveryTruck().move(3);
-    Delay.msDelay(1000);*/
+
+    for (int i = 0; i < 6; i++) {
+      truck.move(i);
+      Delay.msDelay(1000);
+    }
 
     //controller.getDeliveryTruck().readLines(controller.getDeliveryTruck().getColor());
-
-    controller.updateView();
 
     System.exit(0);
   }
