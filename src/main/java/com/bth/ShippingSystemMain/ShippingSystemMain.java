@@ -1,10 +1,8 @@
 package com.bth.ShippingSystemMain;
 
 import com.bth.Controller.ShippingSystemController;
-import com.bth.Controller.Thread.DTThreadPooledServer;
 import com.bth.Model.Trucks.DeliveryTruck;
 import com.bth.View.ShippingSystemView;
-import lejos.utility.Delay;
 
 public class ShippingSystemMain {
 
@@ -25,18 +23,13 @@ public class ShippingSystemMain {
     ShippingSystemController controller = new ShippingSystemController(view, truck);
 
     // Pooled Server initialisation
-    controller.setPooledServer(new DTThreadPooledServer("ServerThread-1", 8000));
+    /*controller.setPooledServer(new DTThreadPooledServer("ServerThread-1", 8000));
     controller.getPooledServer().start();
-    controller.runPooledServer(controller.getPooledServer());
+    controller.runPooledServer(controller.getPooledServer());*/
 
     // DT initialisation
 
-    for (int i = 0; i < 6; i++) {
-      truck.move(i);
-      Delay.msDelay(1000);
-    }
-
-    //controller.getDeliveryTruck().readLines(controller.getDeliveryTruck().getColor());
+    controller.getDeliveryTruck().runTruck();
 
     System.exit(0);
   }

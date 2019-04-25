@@ -3,11 +3,14 @@ package com.bth.Model.Trucks;
 import com.bth.Controller.WebAPI.WebServer;
 import com.bth.Model.Sensors.LineReaderV2;
 import com.bth.Model.Truck;
+import com.bth.Utilities.ShippingSystemUtilities;
 import ev3dev.actuators.lego.motors.EV3LargeRegulatedMotor;
 import ev3dev.actuators.lego.motors.EV3MediumRegulatedMotor;
 import ev3dev.sensors.ev3.EV3TouchSensor;
 import ev3dev.sensors.ev3.EV3UltrasonicSensor;
+import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 import lejos.hardware.port.Port;
 import lejos.utility.Delay;
 
@@ -42,6 +45,7 @@ public class DeliveryTruck extends Truck {
 
     motorDrive = new EV3MediumRegulatedMotor(Truck.motorPorts[3]);   // PORT D
     motorSteer = new EV3MediumRegulatedMotor(Truck.motorPorts[2]);   // PORT C
+    extender = new EV3MediumRegulatedMotor(Truck.motorPorts[1]);
     lineReader = new LineReaderV2(Truck.sensorPorts[2]);   // PORT S3
     sensorProximity = new EV3UltrasonicSensor(Truck.sensorPorts[0]);   // PORT S1
 
@@ -100,7 +104,29 @@ public class DeliveryTruck extends Truck {
           break;
         case 3:
           System.out.println("Start case 3");
-          // Do stuff here Joel
+          // Do stuff here Joe
+
+          this.motorDrive.setSpeed(500);
+          Delay.msDelay(HALF_SECOND);
+          this.motorDrive.backward();
+          Delay.msDelay(10000);
+          this.motorSteer.setSpeed(200);
+          Delay.msDelay(HALF_SECOND);
+          this.motorSteer.rotate(110, true);
+          Delay.msDelay(HALF_SECOND);
+          this.motorSteer.forward();
+          for (int i = 0; i < 10; i++) {
+            System.out.println(motorSteer.getPosition());
+
+            int[] info = lineReader.getCALValues();
+            System.out.println(Arrays.toString(info));
+
+            Delay.msDelay(1000);
+          }
+          Delay.msDelay(1000);
+          this.motorDrive.forward();
+          Delay.msDelay(10000);
+
           System.out.println("Finished case 3!");
           break;
         case 4:
@@ -143,7 +169,35 @@ public class DeliveryTruck extends Truck {
 
           this.motorSteer.stop();
           System.out.println("Finished case 5!");
+        case 6:
+          extender.setSpeed(80);
+          Delay.msDelay(500);
+          extender.backward();
+          Delay.msDelay(6000);
+          extender.forward();
+          Delay.msDelay(6000);
+
+        case 7:
+          while (lineReader.isFollowing()) {
+
+          }
       }
+    }
+  }
+
+  public void runTruck() {
+    while (lineReader.isFollowing()) {
+      List<int[]> values = ShippingSystemUtilities
+          .splitArray(lineReader.getCALValues(), 3, new int[]{3, 2, 3});
+      int readLines = 0;
+      if (values != null) {
+        readLines = LineReaderV2.directionToMove(values);
+      }
+
+      motorSteer.rotate(readLines * 15);
+      Delay.msDelay(400);
+      motorDrive.backward();
+      Delay.msDelay(1500);
     }
   }
 

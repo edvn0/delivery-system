@@ -3,7 +3,9 @@ package com.bth.Model.Sensors;
 import ev3dev.sensors.BaseSensor;
 import java.util.Arrays;
 import java.util.HashSet;
+import java.util.List;
 import java.util.Set;
+import java.util.stream.IntStream;
 import lejos.hardware.port.Port;
 
 /**
@@ -64,7 +66,6 @@ public class LineReaderV2 extends BaseSensor {
     super(portName, LEGO_I2C, MINDSENSORS_LINEREADERV2);
     this.initModes();
   }
-
 
   /**
    * Get the PID mode value
@@ -193,4 +194,50 @@ public class LineReaderV2 extends BaseSensor {
   }
 
 
+  public boolean isFollowing() {
+    int iterations = 3;
+    this.wake();
+    int threshold = 65;
+
+    int mean = IntStream.of(this.generateValues(iterations)).sum();
+
+    return mean >= threshold;
+  }
+
+
+  public static int directionToMove(List<int[]> values) {
+    // generate partial thresholds for right and left, will return -1 to move left, 1 to move right
+    // 0 to continue to move forward.
+
+    double m1 = IntStream.of(values.get(0)).sum() / (double) values.get(0).length;
+    double m2 = IntStream.of(values.get(1)).sum() / (double) values.get(1).length;
+    double m3 = IntStream.of(values.get(2)).sum() / (double) values.get(2).length;
+
+    if (m1 > m2 && m1 > m2) {
+      return -1;
+    } else if (m2 > m3 && m2 > m1) {
+      return 0;
+    } else if (m3 > m1 && m3 > m2) {
+      return 1;
+    } else {
+      return 10;
+    }
+  }
+
+  private int[] generateValues(int iterations) {
+    int[] values = new int[8];
+
+    for (int i = 0; i < iterations; i++) {
+      int[] newValues = this.getCALValues();
+      for (int j = 0; j < values.length; j++) {
+        values[j] += newValues[j];
+      }
+    }
+
+    for (int i = 0; i < iterations; i++) {
+      values[i] /= iterations;
+    }
+
+    return values;
+  }
 }
