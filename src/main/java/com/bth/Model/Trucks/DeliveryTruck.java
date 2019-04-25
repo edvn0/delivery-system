@@ -100,7 +100,7 @@ public class DeliveryTruck extends Truck {
           break;
         case 3:
           System.out.println("Start case 3");
-
+          // Do stuff here Joel
           System.out.println("Finished case 3!");
           break;
         case 4:
