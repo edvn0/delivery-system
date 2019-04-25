@@ -94,7 +94,7 @@ public class DTThreadPooledServer extends Thread {
     try {
       this.serverSocket = new ServerSocket(this.serverPort);
     } catch (IOException e) {
-      throw new RuntimeException("Cannot open port 8000", e);
+      throw new RuntimeException("Cannot open port 5000", e);
     }
   }
 

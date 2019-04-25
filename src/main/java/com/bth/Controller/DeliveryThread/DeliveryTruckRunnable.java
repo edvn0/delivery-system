@@ -2,6 +2,7 @@ package com.bth.Controller.DeliveryThread;
 
 import com.bth.Model.Truck;
 import com.bth.Model.Trucks.DeliveryTruck;
+import lejos.utility.Delay;
 
 public class DeliveryTruckRunnable extends Thread implements Runnable {
 
@@ -20,7 +21,7 @@ public class DeliveryTruckRunnable extends Thread implements Runnable {
       throw new NullPointerException("Truck is null");
     } else {
       this.startMotors();
-      System.out.println("Exiting thread for id: " + id);
+      System.out.println("Started motors.");
     }
   }
 
@@ -30,13 +31,13 @@ public class DeliveryTruckRunnable extends Thread implements Runnable {
        AND HOW TO WRITE CODE:
     */
 
-    System.out.println("Starting motors, while looping initiating.");
-    System.out.println("Value for boolean:" + (Truck.isRunning && !Truck.runThreadIsExecuted));
+    System.out.println("Is truck and runThread running?: " + (Truck.isRunning && !Truck.runThreadIsExecuted));
 
     while (Truck.isRunning && !Truck.runThreadIsExecuted) {
       // Fixme: this is an indicator for the while loop.
       System.out.println("Sleep for while loop in startMotors();");
 
+      Delay.msDelay(1000);
       Truck.runThreadIsExecuted = true;
     }
     return true;

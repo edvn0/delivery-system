@@ -86,34 +86,40 @@ public class SocketThread extends Thread {
 
       if (Truck.outputCommandSCS.equals("FINISHED")) {
 
-        System.out.println("worker-FINISHED");
+        System.out.println("Worker is finished.");
         Truck.outputCommandSCS = "none";
       }
 
       try {
         line = reader.readLine();
-        System.out.println("RECEIVED " + line);
+        if (line == null) {
+          break;
+        }
+        System.out.println("Received " + line);
       } catch (IOException e) {
         e.printStackTrace();
       }
 
-      System.out.println(line);
-      switch (line) {
-        case "RUN":
-          Truck.inputCommandSCS = line;
-          break;
-        case "LEFT-PRESS":
-          Truck.inputCommandSCS = line;
-          break;
-        case "STOP":
-          Truck.inputCommandSCS = line;
-          Truck.runThreadIsExecuted = true;
-          break;
-        case "KILL":
-          Truck.inputCommandSCS = line;
-          Truck.isRunning = false;
-          Truck.runThreadIsExecuted = true;
-          break;
+      String input = line.split(" ")[0].equals("GET") ? line.split(" ")[1].substring(1) : "";
+
+      if (!input.equals("")) {
+        switch (input) {
+          case "RUN":
+            Truck.inputCommandSCS = line;
+            break;
+          case "LEFT-PRESS":
+            Truck.inputCommandSCS = line;
+            break;
+          case "STOP":
+            Truck.inputCommandSCS = line;
+            Truck.runThreadIsExecuted = true;
+            break;
+          case "KILL":
+            Truck.inputCommandSCS = line;
+            Truck.isRunning = false;
+            Truck.runThreadIsExecuted = true;
+            break;
+        }
       }
     }
 

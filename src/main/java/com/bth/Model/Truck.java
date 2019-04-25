@@ -8,8 +8,8 @@ import lejos.hardware.port.SensorPort;
 
 public abstract class Truck {
 
-  public static int HALF_SECOND = 500;
-  public static double minVoltage = 7.100d;
+  protected static int HALF_SECOND = 500;
+  private static double minVoltage = 7.100d;
 
   //Synchronization variables between threads to allow intra thread communication
   //Main variable for stopping execution
@@ -67,7 +67,7 @@ public abstract class Truck {
   public boolean checkBattery() {
     System.out.println("Battery Voltage: " + Battery.getInstance().getVoltage());
     System.out.println("Battery Current: " + Battery.getInstance().getBatteryCurrent());
-    if (Battery.getInstance().getVoltage() < DeliveryTruck.minVoltage) {
+    if (Battery.getInstance().getVoltage() < Truck.minVoltage) {
       System.out.println("Battery voltage too low, shutdown");
       System.out.println("Please change the batteries");
       System.exit(0);

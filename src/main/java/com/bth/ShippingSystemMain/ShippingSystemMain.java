@@ -1,12 +1,13 @@
 package com.bth.ShippingSystemMain;
 
 import com.bth.Controller.ShippingSystemController;
-import com.bth.Controller.WebAPI.WebServer;
+import com.bth.Controller.Thread.DTThreadPooledServer;
 import com.bth.Model.Trucks.DeliveryTruck;
 import com.bth.View.ShippingSystemView;
-import java.io.IOException;
 
 public class ShippingSystemMain {
+
+  public static final boolean DEV = true;
 
   public static void main(String[] args) {
     java.awt.EventQueue.invokeLater(ShippingSystemMain::run);
@@ -22,20 +23,10 @@ public class ShippingSystemMain {
         shippingSystem.getDeliveries());
     ShippingSystemController controller = new ShippingSystemController(view, truck);
 
-    WebServer server = null;
-
-    try {
-      server = new WebServer(3306);
-      server.run();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
-
     // Pooled Server initialisation
-    //controller.initalizeRunThread("Main Thread");
-    //controller.setPooledServer(new DTThreadPooledServer("ServerThread-1", 8000));
-    //controller.getPooledServer().start();
-    //controller.runPooledServer(controller.getPooledServer());
+    controller.setPooledServer(new DTThreadPooledServer("ServerThread-1", 8000));
+    controller.getPooledServer().start();
+    controller.runPooledServer(controller.getPooledServer());
 
     // DT initialisation
     /*controller.getDeliveryTruck().move(0);
@@ -49,7 +40,7 @@ public class ShippingSystemMain {
 
     //controller.getDeliveryTruck().readLines(controller.getDeliveryTruck().getColor());
 
-    //controller.updateView();
+    controller.updateView();
 
     System.exit(0);
   }

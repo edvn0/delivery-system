@@ -1,7 +1,9 @@
 package com.bth.Model.Trucks;
 
+import com.bth.Controller.WebAPI.WebServer;
 import com.bth.Model.Sensors.LineReaderV2;
 import com.bth.Model.Truck;
+import com.bth.ShippingSystemMain.ShippingSystemMain;
 import ev3dev.actuators.lego.motors.EV3LargeRegulatedMotor;
 import ev3dev.actuators.lego.motors.EV3MediumRegulatedMotor;
 import ev3dev.sensors.ev3.EV3TouchSensor;
@@ -11,6 +13,8 @@ import lejos.hardware.port.Port;
 import lejos.utility.Delay;
 
 public class DeliveryTruck extends Truck {
+
+  private static final double leastDistance = 0.25; // 25 centimeters.
 
   //motor for drive forwards and backwards - connected to motor port D
   public EV3MediumRegulatedMotor motorDrive;
@@ -36,13 +40,20 @@ public class DeliveryTruck extends Truck {
   private HashMap<Port, Double> speeds;
 
   public DeliveryTruck(String name, int id) {
-    motorDrive = new EV3MediumRegulatedMotor(Truck.motorPorts[3]);   // PORT D
-    motorSteer = new EV3MediumRegulatedMotor(Truck.motorPorts[2]);   // PORT C
-    lineReader = new LineReaderV2(Truck.sensorPorts[2]);   // PORT S3
-    sensorProximity = new EV3UltrasonicSensor(Truck.sensorPorts[0]);   // PORT S1
+    if (!ShippingSystemMain.DEV) {
+      motorDrive = new EV3MediumRegulatedMotor(Truck.motorPorts[3]);   // PORT D
+      motorSteer = new EV3MediumRegulatedMotor(Truck.motorPorts[2]);   // PORT C
+      lineReader = new LineReaderV2(Truck.sensorPorts[2]);   // PORT S3
+      sensorProximity = new EV3UltrasonicSensor(Truck.sensorPorts[0]);   // PORT S1
+    }
 
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
-      System.out.println("Emergency Stop");
+      System.out.println("Emergency Stop!");
+
+      Truck.inputCommandSCS = "";
+      Truck.runThreadIsExecuted = true;
+      Truck.isRunning = false;
+
       motorDrive.stop();
       motorSteer.stop();
     }));
@@ -153,8 +164,14 @@ public class DeliveryTruck extends Truck {
   }
 
   // TODO: fix the integration with a localhost server.
-  public void doStuff(String theThing) {
+  public static void doStuff(WebServer server) {
+    System.out.println("Running!");
+    while (server.isRunning) {
 
+      System.out.println(server.getCommand());
+      Delay.msDelay(500);
+    }
+    System.out.println("Stop running!");
   }
 
   private int getSpeed(Port port) {

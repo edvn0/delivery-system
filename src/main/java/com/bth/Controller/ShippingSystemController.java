@@ -16,8 +16,6 @@ import java.util.ArrayList;
  */
 public class ShippingSystemController {
 
-  private static final double leastDistance = 0.25; // 25 centimeters.
-
   // Server stuff
   private DTThreadPooledServer pooledServer;
   private DeliveryTruck truck;
@@ -40,20 +38,17 @@ public class ShippingSystemController {
     this.forkliftTrucks = null;
   }
 
-  public boolean initalizeRunThread(String id) {
+  public void initializeRunThread(String id) {
     DeliveryTruckRunnable run;
     run = new DeliveryTruckRunnable(id);
     run.setTruck(truck);
     run.start();
     Truck.runThreadIsStarted = true;
     Truck.runThreadIsExecuted = false;
-    return true;
   }
 
   public void updateView() {
-    System.out.println("DO STUFF");
-
-    while (!DeliveryTruck.runThreadIsExecuted) {
+    while (!Truck.runThreadIsExecuted) {
 
       try {
         Thread.sleep(10 * 100);
@@ -61,10 +56,10 @@ public class ShippingSystemController {
         e.printStackTrace();
       }
 
-      if (DeliveryTruck.runThreadIsExecuted) {
-        DeliveryTruck.inputCommandSCS = "";
-        DeliveryTruck.runThreadIsStarted = false;
-        DeliveryTruck.isRunning = false;
+      if (Truck.runThreadIsExecuted) {
+        Truck.inputCommandSCS = "";
+        Truck.runThreadIsStarted = false;
+        Truck.isRunning = false;
       }
     }
   }
@@ -75,12 +70,13 @@ public class ShippingSystemController {
 
   public void runPooledServer(DTThreadPooledServer pooledServer) {
     while (Truck.isRunning) {
+      System.out.println("Outputting truck command in DTThreadPool: " + Truck.inputCommandSCS);
       if (Truck.inputCommandSCS.equals("KILL")) {
         Truck.isRunning = false;
       }
 
       if (Truck.inputCommandSCS.equals("RUN") && (!Truck.runThreadIsStarted)) {
-        initalizeRunThread("RUN Thread");
+        initializeRunThread("RUN Thread");
       }
 
       if (!Truck.runThreadIsExecuted) {
@@ -151,10 +147,6 @@ public class ShippingSystemController {
 
   public ShippingSystemView getView() {
     return view;
-  }
-
-  public static double getLeastDistance() {
-    return leastDistance;
   }
 
   public ForkliftTruck getForkliftTruck(String name, int id) {
