@@ -21,7 +21,8 @@ public abstract class Truck {
   public static boolean runThreadIsStarted = false;
   public static boolean runThreadIsExecuted = false;
 
-  public static Port[] ports = {MotorPort.A, MotorPort.B, MotorPort.C, MotorPort.D, SensorPort.S1,
+  public static Port[] motorPorts = {MotorPort.A, MotorPort.B, MotorPort.C, MotorPort.D,};
+  public static Port[] sensorPorts = {SensorPort.S1,
       SensorPort.S2, SensorPort.S3, SensorPort.S4};
 
   /***

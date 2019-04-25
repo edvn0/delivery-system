@@ -35,11 +35,11 @@ public class DeliveryTruck extends Truck {
   private int id;
   private HashMap<Port, Double> speeds;
 
-  public DeliveryTruck(String name, int id, Port[] ports) {
-    motorDrive = new EV3MediumRegulatedMotor(ports[3]);   // PORT D
-    motorSteer = new EV3MediumRegulatedMotor(ports[2]);   // PORT C
-    lineReader = new LineReaderV2(ports[6]);   // PORT S3
-    sensorProximity = new EV3UltrasonicSensor(ports[4]);   // PORT S1
+  public DeliveryTruck(String name, int id) {
+    motorDrive = new EV3MediumRegulatedMotor(Truck.motorPorts[3]);   // PORT D
+    motorSteer = new EV3MediumRegulatedMotor(Truck.motorPorts[2]);   // PORT C
+    lineReader = new LineReaderV2(Truck.sensorPorts[2]);   // PORT S3
+    sensorProximity = new EV3UltrasonicSensor(Truck.sensorPorts[0]);   // PORT S1
 
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
       System.out.println("Emergency Stop");
@@ -50,6 +50,7 @@ public class DeliveryTruck extends Truck {
     this.name = name;
     this.id = id;
 
+    // DEV only.
     this.speeds = initSpeeds(new double[]{100, 1300, 500, 500});
   }
 
@@ -60,7 +61,7 @@ public class DeliveryTruck extends Truck {
       switch (dir) {
         case 0:
           //Move Forward
-          double speedMotor = this.speeds.get(Truck.ports[3]);
+          double speedMotor = this.speeds.get(Truck.motorPorts[3]);
           this.setMotorDriveSpeed(speedMotor);
           Delay.msDelay(HALF_SECOND);
           motorDrive.forward();
@@ -69,7 +70,7 @@ public class DeliveryTruck extends Truck {
           break;
         case 1:
           //Back up
-          double speed = this.getSpeed(Truck.ports[3]);
+          double speed = this.getSpeed(Truck.motorPorts[3]);
           this.setMotorDriveSpeed(speed);
           Delay.msDelay(HALF_SECOND);
           motorDrive.backward();
@@ -80,7 +81,7 @@ public class DeliveryTruck extends Truck {
         case 2:
           System.out.println("Start case 2");
 
-          this.motorDrive.setSpeed(this.getSpeed(Truck.ports[3]));
+          this.motorDrive.setSpeed(this.getSpeed(Truck.motorPorts[3]));
           Delay.msDelay(1500);
 
           this.motorDrive.backward();
@@ -192,7 +193,7 @@ public class DeliveryTruck extends Truck {
     int k = 0;
     HashMap<Port, Double> portHashMap = new HashMap<>();
     for (double d : speeds) {
-      portHashMap.put(Truck.ports[k++], d);
+      portHashMap.put(Truck.motorPorts[k++], d);
     }
     return portHashMap;
   }

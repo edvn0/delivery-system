@@ -1,6 +1,8 @@
 package com.bth.ShippingSystemMain;
 
+import com.bth.Controller.ShippingSystemController;
 import com.bth.Controller.WebAPI.WebServer;
+import com.bth.Model.Trucks.DeliveryTruck;
 import com.bth.View.ShippingSystemView;
 import java.io.IOException;
 
@@ -11,14 +13,14 @@ public class ShippingSystemMain {
   }
 
   private static void run() {
-    //DeliveryTruck truck = new DeliveryTruck("Delivery Truck One", 1, Truck.ports);
+    DeliveryTruck truck = new DeliveryTruck("Delivery Truck One", 1);
 
     ShippingSystem shippingSystem = new ShippingSystem();
     ShippingSystemView view = new ShippingSystemView(
         shippingSystem.getForklifts(),
         shippingSystem.getContainers(),
         shippingSystem.getDeliveries());
-    //ShippingSystemController controller = new ShippingSystemController(view, truck);
+    ShippingSystemController controller = new ShippingSystemController(view, truck);
 
     WebServer server = null;
 
