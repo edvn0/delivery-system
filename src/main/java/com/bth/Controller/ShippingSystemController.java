@@ -40,6 +40,7 @@ public class ShippingSystemController {
 
   public void initializeRunThread(String id) {
     DeliveryTruckRunnable run;
+    // NEW THING HERE
     run = new DeliveryTruckRunnable(id);
     run.setTruck(truck);
     run.start();
