@@ -16,21 +16,8 @@ public class ShippingSystemMain {
 
     ShippingSystemController controller = new ShippingSystemController(null, truck);
 
-    // Pooled Server initialisation
-    /*controller.setPooledServer(new DTThreadPooledServer("ServerThread-1", 8000));
-    controller.getPooledServer().start();
-    controller.runPooledServer(controller.getPooledServer());*/
-
-    // DT initialisation
     controller.getDeliveryTruck().runTruck();
 
-    /*
-    long time = System.currentTimeMillis();
-    long end = time + 100000;
-    while (System.currentTimeMillis() < end) {
-      controller.getDeliveryTruck().runTruck();
-    }
-    */
     System.exit(0);
   }
 }

@@ -7,7 +7,8 @@ import java.util.stream.IntStream;
 public class ShippingSystemUtilities {
 
   /***
-   * Splits an integer array into n parts, with arbitrary sizes.
+   * Splits an integer array into n parts, with arbitrary sizes. Essentially a
+   * custom partition.
    * Example:
    * int[]{10,10,1,1,2,3,4} = @param array, 3 = @param num, int[]{3,1,3} = @param splitIndex
    * int[]{10,10,1,1,2,3,4} |-> int[]{10,10,1}, int[]{1}, int[]{2,3,4}
@@ -43,6 +44,27 @@ public class ShippingSystemUtilities {
     }
 
     return ints;
+  }
+
+  /**
+   * Splits an int array into splitIndices.length pieces.
+   *
+   * @param array input array of integers.
+   * @param splitIndices amount of ints in each of the split arrays.
+   * @return ArrayList of split integer arrays.
+   */
+  public static List<int[]> splitArray(int[] array, int[] splitIndices) {
+    return splitArray(array, splitIndices.length, splitIndices);
+  }
+
+  /**
+   * Splits an int array into standard size for the LineReader.
+   *
+   * @param array int array to be split
+   * @return ArrayList with 3 ints, sizes 3,2,3.
+   */
+  public static List<int[]> splitArray(int[] array) {
+    return splitArray(array, 3, new int[]{3, 2, 3});
   }
 
 }

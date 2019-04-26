@@ -1,6 +1,5 @@
 package com.bth.Model;
 
-import com.bth.Model.Trucks.DeliveryTruck;
 import ev3dev.sensors.Battery;
 import lejos.hardware.port.MotorPort;
 import lejos.hardware.port.Port;
@@ -30,6 +29,12 @@ public abstract class Truck {
    * @param dir dir \in (0,1,2,3) \equiv (left, right, up, down)
    */
   public abstract void move(int dir);
+
+
+  /***
+   * Runs the truck, usual implementations can be seen in Delivery Truck.
+   */
+  public abstract void runTruck();
 
   /**
    * Stops the truck.
