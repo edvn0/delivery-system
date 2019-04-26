@@ -20,6 +20,11 @@ public class ForkliftTruck extends Truck {
   }
 
   @Override
+  public void runTruck() {
+
+  }
+
+  @Override
   public void craneStart() {
 
   }

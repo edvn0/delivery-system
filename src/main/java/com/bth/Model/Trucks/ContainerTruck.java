@@ -21,6 +21,11 @@ public class ContainerTruck extends Truck {
   }
 
   @Override
+  public void runTruck() {
+
+  }
+
+  @Override
   public void stop() {
   }
 
