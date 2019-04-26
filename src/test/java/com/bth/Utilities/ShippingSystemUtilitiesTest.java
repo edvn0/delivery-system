@@ -30,14 +30,16 @@ public class ShippingSystemUtilitiesTest {
     List<int[]> ints = ShippingSystemUtilities.splitArray(values, 3, indices);
     boolean test = true;
 
-    for (int[] values : ints) {
-      System.out.println(Arrays.equals(values, test1) + " " + Arrays.equals(values, test2) + " " +
-          Arrays.equals(values, test3));
-      if (!(Arrays.equals(values, test1) || Arrays.equals(values, test2) || Arrays
-          .equals(values, test3))) {
-        test = false;
-        break;
+    if (values != null) {
+      for (int[] values : ints) {
+        if (!(Arrays.equals(values, test1) || Arrays.equals(values, test2) || Arrays
+            .equals(values, test3))) {
+          test = false;
+          break;
+        }
       }
+    } else {
+      test = false;
     }
 
     Assert.assertTrue("Should be true", test);
@@ -57,12 +59,16 @@ public class ShippingSystemUtilitiesTest {
 
     if (tests != null) {
       for (int[] in : tests) {
-        if (!(Arrays.equals(in, test1) || Arrays.equals(in, test2) || Arrays
-            .equals(in, test3))) {
+        if (!(Arrays.equals(in, test1)
+            || Arrays.equals(in, test2)
+            || Arrays.equals(in, test3)
+            || Arrays.equals(in, test4))) {
           test = false;
           break;
         }
       }
+    } else {
+      test = false;
     }
     Assert.assertTrue("Should be true", test);
   }

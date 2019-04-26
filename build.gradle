@@ -44,8 +44,6 @@ dependencies {
     compile "org.slf4j:slf4j-simple:1.7.25"
     compile "com.github.aivars-sablis:ev3dev-lang-java:2.5.3"
     testCompile "junit:junit:4.12"
-    testCompile group: 'org.jboss.arquillian.junit', name: 'arquillian-junit-container', version: '1.4.0.Final'
-    testCompile group: 'org.jboss.shrinkwrap', name: 'shrinkwrap-impl-base', version: '1.2.6'
 }
 
 compileJava.options.encoding = 'UTF-8'

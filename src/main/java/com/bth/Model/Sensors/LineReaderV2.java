@@ -196,32 +196,48 @@ public class LineReaderV2 extends BaseSensor {
 
   public boolean isFollowing() {
     int iterations = 3;
-    this.wake();
     int threshold = 65;
 
     int mean = IntStream.of(this.generateValues(iterations)).sum();
+
+    System.out.println(mean);
 
     return mean >= threshold;
   }
 
 
   public static int directionToMove(List<int[]> values) {
-    // generate partial thresholds for right and left, will return -1 to move left, 1 to move right
-    // 0 to continue to move forward.
-
     double m1 = IntStream.of(values.get(0)).sum() / (double) values.get(0).length;
     double m2 = IntStream.of(values.get(1)).sum() / (double) values.get(1).length;
     double m3 = IntStream.of(values.get(2)).sum() / (double) values.get(2).length;
+    //double m4 = IntStream.of(values.get(3)).sum() / (double) values.get(3).length;
+    //double m5 = IntStream.of(values.get(4)).sum() / (double) values.get(4).length;
 
-    if (m1 > m2 && m1 > m2) {
-      return -1;
-    } else if (m2 > m3 && m2 > m1) {
-      return 0;
-    } else if (m3 > m1 && m3 > m2) {
+    System.out.println(m1 + " " + m2 + " " + m3);
+    //TODO: fix threshold.
+    if (m1 + m2 + m3 / 3 <= 35) {
+    /*if (m1 < m2 && m1 < m3) {
       return 1;
+    } else if (m2 < m3 && m2 < m1) {
+      return 0;
+    } else if (m3 < m1 && m3 < m2) {
+      return -1;
     } else {
       return 10;
+    }*/
+
+      if (m1 < 50) {
+        return 1;
+      } else if (m3 < 50) {
+        return -1;
+      } else if (m2 < 50) {
+        return 0;
+      }
+
+    } else {
+      return 0;
     }
+    return 0;
   }
 
   private int[] generateValues(int iterations) {

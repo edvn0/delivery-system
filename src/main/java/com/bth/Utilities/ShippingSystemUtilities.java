@@ -33,8 +33,8 @@ public class ShippingSystemUtilities {
     for (int i = 0; i < num; i++) {
       int[] temp = new int[splitIndices[k]];
 
-      for (int j = index; j < index + splitIndices[k]; j++) {
-        temp[j - index] = array[j];
+      if (index + splitIndices[k] - index >= 0) {
+        System.arraycopy(array, index, temp, 0, index + splitIndices[k] - index);
       }
 
       index += splitIndices[k++];

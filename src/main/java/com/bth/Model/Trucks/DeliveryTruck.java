@@ -178,27 +178,41 @@ public class DeliveryTruck extends Truck {
           Delay.msDelay(6000);
 
         case 7:
-          while (lineReader.isFollowing()) {
 
-          }
       }
     }
   }
 
   public void runTruck() {
-    while (lineReader.isFollowing()) {
-      List<int[]> values = ShippingSystemUtilities
-          .splitArray(lineReader.getCALValues(), 3, new int[]{3, 2, 3});
-      int readLines = 0;
-      if (values != null) {
-        readLines = LineReaderV2.directionToMove(values);
-      }
+    lineReader.wake();
+    motorDrive.setSpeed(100);
+    motorSteer.setSpeed(150);
+    int previousDirection = 0;
+    int i = 0;
+    while (true) {
+      if (lineReader.isFollowing()) {
+        List<int[]> values = ShippingSystemUtilities.
+            splitArray(lineReader.getCALValues(), 3, new int[]{3, 2, 3});
 
-      motorSteer.rotate(readLines * 15);
-      Delay.msDelay(400);
-      motorDrive.backward();
-      Delay.msDelay(1500);
+        if (values != null) {
+          previousDirection = LineReaderV2.directionToMove(values);
+        }
+
+        motorSteer.rotate(previousDirection * 100, true);
+        System.out.println(motorSteer.getTachoCount() + " " + motorDrive.getPosition());
+        System.out.println(motorSteer.getPosition() + " " + motorDrive.getTachoCount());
+
+        Delay.msDelay(500);
+        motorDrive.backward();
+        motorSteer.forward();
+
+        System.out.println("Loop:" + i++);
+        if (i > 20) {
+          break;
+        }
+      }
     }
+    motorDrive.stop();
   }
 
   // TODO: fix the integration with a localhost server.

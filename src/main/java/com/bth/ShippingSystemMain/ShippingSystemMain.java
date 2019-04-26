@@ -2,7 +2,6 @@ package com.bth.ShippingSystemMain;
 
 import com.bth.Controller.ShippingSystemController;
 import com.bth.Model.Trucks.DeliveryTruck;
-import com.bth.View.ShippingSystemView;
 
 public class ShippingSystemMain {
 
@@ -15,12 +14,7 @@ public class ShippingSystemMain {
   private static void run() {
     DeliveryTruck truck = new DeliveryTruck("Delivery Truck One", 1);
 
-    ShippingSystem shippingSystem = new ShippingSystem();
-    ShippingSystemView view = new ShippingSystemView(
-        shippingSystem.getForklifts(),
-        shippingSystem.getContainers(),
-        shippingSystem.getDeliveries());
-    ShippingSystemController controller = new ShippingSystemController(view, truck);
+    ShippingSystemController controller = new ShippingSystemController(null, truck);
 
     // Pooled Server initialisation
     /*controller.setPooledServer(new DTThreadPooledServer("ServerThread-1", 8000));
@@ -28,9 +22,15 @@ public class ShippingSystemMain {
     controller.runPooledServer(controller.getPooledServer());*/
 
     // DT initialisation
-
     controller.getDeliveryTruck().runTruck();
 
+    /*
+    long time = System.currentTimeMillis();
+    long end = time + 100000;
+    while (System.currentTimeMillis() < end) {
+      controller.getDeliveryTruck().runTruck();
+    }
+    */
     System.exit(0);
   }
 }

@@ -29,7 +29,7 @@ public class LineReaderV2Test {
 
     int ret = LineReaderV2.directionToMove(finalValues);
 
-    Assert.assertEquals("Should return 0", 0, ret);
+    Assert.assertEquals("Should return -1", -1, ret);
   }
 
   @Test
@@ -53,6 +53,6 @@ public class LineReaderV2Test {
 
     int ret = LineReaderV2.directionToMove(finalValues);
 
-    Assert.assertEquals("Should return 2", 2, ret);
+    Assert.assertEquals("Should return 0", 0, ret);
   }
 }
