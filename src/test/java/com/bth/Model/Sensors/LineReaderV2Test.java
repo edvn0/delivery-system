@@ -29,7 +29,7 @@ public class LineReaderV2Test {
 
     int ret = LineReaderV2.directionToMove(finalValues);
 
-    Assert.assertEquals("Should return -1", -1, ret);
+    Assert.assertEquals("Should return 1", 1, ret);
   }
 
   @Test
@@ -41,7 +41,7 @@ public class LineReaderV2Test {
 
     int ret = LineReaderV2.directionToMove(finalValues);
 
-    Assert.assertEquals("Should return 1", 1, ret);
+    Assert.assertEquals("Should return -1", -1, ret);
   }
 
   @Test
@@ -53,6 +53,19 @@ public class LineReaderV2Test {
 
     int ret = LineReaderV2.directionToMove(finalValues);
 
-    Assert.assertEquals("Should return 0", 0, ret);
+    Assert.assertEquals("Should return -1", -1, ret);
+  }
+
+  @Test
+  public void directionToMoveTestFour() {
+    indices = new int[]{1, 2, 1, 1, 2, 1};
+    values = new int[]{85, 90, 13, 3, 3, 86, 85, 90};
+
+    List<int[]> finalValues = ShippingSystemUtilities.splitArray(values, indices.length, indices);
+
+    int ret = LineReaderV2.directionToMove(finalValues);
+
+    Assert.assertEquals("Direction should be 0", 0, ret);
+
   }
 }
