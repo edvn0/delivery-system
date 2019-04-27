@@ -1,51 +1,55 @@
 package com.bth.Model.Trucks;
 
+import static com.bth.Utilities.ShippingSystemUtilities.directionToMove;
+import static com.bth.Utilities.ShippingSystemUtilities.splitArray;
+import static lejos.utility.Delay.msDelay;
+
 import com.bth.Controller.WebAPI.WebServer;
 import com.bth.Model.Sensors.LineReaderV2;
 import com.bth.Model.Truck;
-import com.bth.Utilities.ShippingSystemUtilities;
 import ev3dev.actuators.lego.motors.EV3LargeRegulatedMotor;
 import ev3dev.actuators.lego.motors.EV3MediumRegulatedMotor;
 import ev3dev.sensors.ev3.EV3TouchSensor;
 import ev3dev.sensors.ev3.EV3UltrasonicSensor;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import lejos.hardware.port.Port;
-import lejos.utility.Delay;
 
 public class DeliveryTruck extends Truck {
 
   private static final double leastDistance = 0.25; // 25 centimeters.
 
   //motor for drive forwards and backwards - connected to motor port D
-  public EV3MediumRegulatedMotor motorDrive;
+  private final EV3MediumRegulatedMotor motorDrive;
   //motor for steering - connected to motor port C
-  public EV3MediumRegulatedMotor motorSteer;
+  private final EV3MediumRegulatedMotor motorSteer;
 
   //motor for crane lifting - connected multiplexer port M1
   private EV3LargeRegulatedMotor craneRotation;
   //motor for crane lifting - connected to motor port B
-  public EV3MediumRegulatedMotor extender;
+  private final EV3MediumRegulatedMotor extender;
   //motor for grabber - connected to motor port A
   public EV3MediumRegulatedMotor craneGrabber;
 
   //sensor for proximity - connect to sensor port S1
-  private EV3UltrasonicSensor sensorProximity;
+  private final EV3UltrasonicSensor sensorProximity;
   //sensor for line reading - connected to sensor port S3
-  private LineReaderV2 lineReader;
+  private final LineReaderV2 lineReader;
   //sensor for crane rotation movement detection S4
   public EV3TouchSensor touchSensor;
 
-  private String name;
-  private int id;
-  private HashMap<Port, Double> speeds;
+  private final String name;
+  private final int id;
+  private final HashMap<Port, Double> speeds;
+  private final ArrayList<Double> history;
 
   public DeliveryTruck(String name, int id) {
 
     motorDrive = new EV3MediumRegulatedMotor(Truck.motorPorts[3]);   // PORT D
     motorSteer = new EV3MediumRegulatedMotor(Truck.motorPorts[2]);   // PORT C
-    extender = new EV3MediumRegulatedMotor(Truck.motorPorts[1]);
+    extender = new EV3MediumRegulatedMotor(Truck.motorPorts[1]); // PORT S2
     lineReader = new LineReaderV2(Truck.sensorPorts[2]);   // PORT S3
     sensorProximity = new EV3UltrasonicSensor(Truck.sensorPorts[0]);   // PORT S1
 
@@ -62,6 +66,7 @@ public class DeliveryTruck extends Truck {
 
     this.name = name;
     this.id = id;
+    this.history = new ArrayList<>();
 
     // DEV only.
     this.speeds = initSpeeds(new double[]{100, 1300, 500, 500});
@@ -76,29 +81,29 @@ public class DeliveryTruck extends Truck {
           //Move Forward
           double speedMotor = this.speeds.get(Truck.motorPorts[3]);
           this.setMotorDriveSpeed(speedMotor);
-          Delay.msDelay(HALF_SECOND);
+          msDelay(HALF_SECOND);
           motorDrive.forward();
-          Delay.msDelay(HALF_SECOND);
+          msDelay(HALF_SECOND);
           this.stop();
           break;
         case 1:
           //Back up
           double speed = this.getSpeed(Truck.motorPorts[3]);
           this.setMotorDriveSpeed(speed);
-          Delay.msDelay(HALF_SECOND);
+          msDelay(HALF_SECOND);
           motorDrive.backward();
-          Delay.msDelay(2500);
+          msDelay(2500);
           this.stop();
           break;
         //This is for development only!
         case 2:
           System.out.println("Start case 2");
 
-          this.motorDrive.setSpeed(this.getSpeed(Truck.motorPorts[3]));
-          Delay.msDelay(1500);
+          this.motorDrive.setSpeed((int) this.getSpeed(Truck.motorPorts[3]));
+          msDelay(1500);
 
           this.motorDrive.backward();
-          Delay.msDelay(10000);
+          msDelay(10000);
 
           System.out.println("Finished case 2!");
           break;
@@ -107,13 +112,13 @@ public class DeliveryTruck extends Truck {
           // Do stuff here Joe
 
           this.motorDrive.setSpeed(500);
-          Delay.msDelay(HALF_SECOND);
+          msDelay(HALF_SECOND);
           this.motorDrive.backward();
-          Delay.msDelay(10000);
+          msDelay(10000);
           this.motorSteer.setSpeed(200);
-          Delay.msDelay(HALF_SECOND);
+          msDelay(HALF_SECOND);
           this.motorSteer.rotate(110, true);
-          Delay.msDelay(HALF_SECOND);
+          msDelay(HALF_SECOND);
           this.motorSteer.forward();
           for (int i = 0; i < 10; i++) {
             System.out.println(motorSteer.getPosition());
@@ -121,27 +126,27 @@ public class DeliveryTruck extends Truck {
             int[] info = lineReader.getCALValues();
             System.out.println(Arrays.toString(info));
 
-            Delay.msDelay(1000);
+            msDelay(1000);
           }
-          Delay.msDelay(1000);
+          msDelay(1000);
           this.motorDrive.forward();
-          Delay.msDelay(10000);
+          msDelay(10000);
 
           System.out.println("Finished case 3!");
           break;
         case 4:
           System.out.println("Start case 4");
           this.motorSteer.setSpeed(200);
-          Delay.msDelay(800);
+          msDelay(800);
 
           this.motorSteer.rotate(-140, true);
-          Delay.msDelay(900);
+          msDelay(900);
 
           this.motorSteer.forward();
-          Delay.msDelay(5000);
+          msDelay(5000);
 
           this.motorDrive.setSpeed(500);
-          Delay.msDelay(1000);
+          msDelay(1000);
 
           // "Async" lol
           long time = System.currentTimeMillis();
@@ -162,20 +167,20 @@ public class DeliveryTruck extends Truck {
           System.out.println("Start case 5");
 
           this.motorSteer.setSpeed(240);
-          Delay.msDelay(1500);
+          msDelay(1500);
 
           this.motorSteer.rotate(140, true);
-          Delay.msDelay(3500);
+          msDelay(3500);
 
           this.motorSteer.stop();
           System.out.println("Finished case 5!");
         case 6:
           extender.setSpeed(80);
-          Delay.msDelay(500);
+          msDelay(500);
           extender.backward();
-          Delay.msDelay(6000);
+          msDelay(6000);
           extender.forward();
-          Delay.msDelay(6000);
+          msDelay(6000);
 
         case 7:
 
@@ -188,36 +193,17 @@ public class DeliveryTruck extends Truck {
     motorDrive.setSpeed(100);
     motorSteer.setSpeed(360);
     motorSteer.setAcceleration(300);
-    int previousDirection = 0;
     int i = 0;
     while (true) {
       if (lineReader.isFollowing()) {
-        List<int[]> values = ShippingSystemUtilities.
-            splitArray(lineReader.getCALValues(), 3, new int[]{3, 2, 3});
-
-        if (values != null) {
-          previousDirection = LineReaderV2.directionToMove(values);
-        }
-
-        if (previousDirection == 402) {
-          motorDrive.stop();
-          motorSteer.stop();
-          Delay.msDelay(500);
-          break;
-        }
-
-        motorSteer.rotate(previousDirection * 360, true);
-
-        Delay.msDelay(500);
-        motorDrive.backward();
-
+        readLines();
         System.out.println("Loop:" + i++);
         if (i > 20) {
           break;
         }
       }
     }
-    motorDrive.stop();
+    this.stop();
   }
 
   // TODO: fix the integration with a localhost server.
@@ -226,31 +212,35 @@ public class DeliveryTruck extends Truck {
     while (server.isRunning) {
 
       System.out.println(server.getCommand());
-      Delay.msDelay(500);
+      msDelay(500);
     }
     System.out.println("Stop running!");
   }
 
-  private int getSpeed(Port port) {
-    return this.speeds.get(port).intValue();
+  private double getSpeed(Port port) {
+    return this.speeds.get(port);
   }
 
   @Override
   protected void stop() {
     motorDrive.stop();
-    Delay.msDelay(800);
+    msDelay(800);
     motorSteer.stop();
-    Delay.msDelay(800);
+    msDelay(800);
   }
 
   @Override
   public void craneStart() {
-
+    extender.setSpeed(200);
+    extender.forward();
+    msDelay(2500);
   }
 
   @Override
   public void craneStop() {
-
+    extender.setSpeed(200);
+    extender.backward();
+    msDelay(2500);
   }
 
   @Override
@@ -259,8 +249,25 @@ public class DeliveryTruck extends Truck {
   }
 
   @Override
-  public void readLines(int color) {
+  public void readLines() {
+    int previousDirection = 0;
+    List<int[]> values = splitArray(lineReader.getCALValues(), 3, new int[]{3, 2, 3});
 
+    if (values != null) {
+      previousDirection = directionToMove(values);
+    }
+
+    if (previousDirection == 402) {
+      motorDrive.stop();
+      motorSteer.stop();
+      msDelay(500);
+      return;
+    }
+
+    motorSteer.rotate(previousDirection * 360, true);
+    msDelay(500);
+
+    motorDrive.backward();
   }
 
   private HashMap<Port, Double> initSpeeds(double[] speeds) {

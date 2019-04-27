@@ -1,17 +1,14 @@
 package com.bth.Model.Trucks;
 
 import com.bth.Model.Truck;
-import com.bth.Model.TruckColourEnum;
 
 public class ContainerTruck extends Truck {
 
-  private String name;
-  private int colorForLines;
-  private int id;
+  private final String name;
+  private final int id;
 
   public ContainerTruck(String name, int id) {
     this.name = name;
-    this.colorForLines = TruckColourEnum.GREEN.getColor();
     this.id = id;
   }
 
@@ -45,7 +42,7 @@ public class ContainerTruck extends Truck {
   }
 
   @Override
-  public void readLines(int color) {
+  public void readLines() {
 
   }
 

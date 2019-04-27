@@ -14,7 +14,7 @@ import org.slf4j.LoggerFactory;
 
 public class WebServer {
 
-  public static Logger LOGGER = LoggerFactory.getLogger(WebServer.class.getName());
+  private static final Logger LOGGER = LoggerFactory.getLogger(WebServer.class.getName());
 
   public boolean isRunning = false;
 
@@ -22,7 +22,7 @@ public class WebServer {
 
   private ServerSocket ss;
 
-  public WebServer(final int port) throws IOException {
+  private WebServer(final int port) throws IOException {
     LOGGER.info("Creating a simple API");
 
     ss = new ServerSocket(port);
@@ -63,7 +63,7 @@ public class WebServer {
     }
   }
 
-  public String execute(String cmd) {
+  private String execute(String cmd) {
     String[] tokens = cmd.split(" ");
     if (tokens.length > 1 && tokens[0].equals("GET")) {
       if (tokens[1].equals("/stop")) {
@@ -78,7 +78,7 @@ public class WebServer {
 
   private String readFile() {
 
-    StringBuffer document = new StringBuffer();
+    StringBuilder document = new StringBuilder();
 
     try {
 

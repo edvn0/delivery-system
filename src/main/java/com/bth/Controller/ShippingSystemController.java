@@ -18,7 +18,7 @@ public class ShippingSystemController {
 
   // Server stuff
   private DTThreadPooledServer pooledServer;
-  private DeliveryTruck truck;
+  private final DeliveryTruck truck;
 
   // Models
   private ArrayList<ForkliftTruck> forkliftTrucks;
@@ -38,7 +38,7 @@ public class ShippingSystemController {
     this.forkliftTrucks = null;
   }
 
-  public void initializeRunThread(String id) {
+  private void initializeRunThread(String id) {
     DeliveryTruckRunnable run;
     // NEW THING HERE
     run = new DeliveryTruckRunnable(id);
