@@ -21,8 +21,7 @@ public abstract class Truck {
   public static boolean runThreadIsExecuted = false;
 
   public static Port[] motorPorts = {MotorPort.A, MotorPort.B, MotorPort.C, MotorPort.D,};
-  public static Port[] sensorPorts = {SensorPort.S1,
-      SensorPort.S2, SensorPort.S3, SensorPort.S4};
+  public static Port[] sensorPorts = {SensorPort.S1, SensorPort.S2, SensorPort.S3, SensorPort.S4};
 
   /***
    * Moves the truck in a direction,
@@ -61,9 +60,8 @@ public abstract class Truck {
 
   /***
    * Checks floor for lines
-   * @param color of the lines. Is associated with type of truck.
    */
-  public abstract void readLines(int color);
+  public abstract void readLines();
 
   public abstract String getName();
 

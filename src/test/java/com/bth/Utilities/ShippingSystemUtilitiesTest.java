@@ -1,5 +1,7 @@
 package com.bth.Utilities;
 
+import static com.bth.Utilities.ShippingSystemUtilities.splitArray;
+
 import java.util.Arrays;
 import java.util.List;
 import org.junit.After;
@@ -9,7 +11,7 @@ import org.junit.Test;
 
 public class ShippingSystemUtilitiesTest {
 
-  int[] values, test1, test2, test3, indices;
+  private int[] values, test1, test2, test3, indices;
 
   @Before
   public void setUp() throws Exception {
@@ -27,7 +29,7 @@ public class ShippingSystemUtilitiesTest {
     test2 = new int[]{4, 1};
     test3 = new int[]{2, 7, 1};
     indices = new int[]{3, 2, 3};
-    List<int[]> ints = ShippingSystemUtilities.splitArray(values, 3, indices);
+    List<int[]> ints = splitArray(values);
     boolean test = true;
 
     if (values != null) {
@@ -55,7 +57,7 @@ public class ShippingSystemUtilitiesTest {
 
     boolean test = true;
 
-    List<int[]> tests = ShippingSystemUtilities.splitArray(values, 4, indices);
+    List<int[]> tests = splitArray(values, 4, indices);
 
     if (tests != null) {
       for (int[] in : tests) {
