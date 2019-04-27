@@ -186,7 +186,8 @@ public class DeliveryTruck extends Truck {
   public void runTruck() {
     lineReader.wake();
     motorDrive.setSpeed(100);
-    motorSteer.setSpeed(150);
+    motorSteer.setSpeed(360);
+    motorSteer.setAcceleration(300);
     int previousDirection = 0;
     int i = 0;
     while (true) {
@@ -198,13 +199,17 @@ public class DeliveryTruck extends Truck {
           previousDirection = LineReaderV2.directionToMove(values);
         }
 
-        motorSteer.rotate(previousDirection * 100, true);
-        System.out.println(motorSteer.getTachoCount() + " " + motorDrive.getPosition());
-        System.out.println(motorSteer.getPosition() + " " + motorDrive.getTachoCount());
+        if (previousDirection == 402) {
+          motorDrive.stop();
+          motorSteer.stop();
+          Delay.msDelay(500);
+          break;
+        }
+
+        motorSteer.rotate(previousDirection * 360, true);
 
         Delay.msDelay(500);
         motorDrive.backward();
-        motorSteer.forward();
 
         System.out.println("Loop:" + i++);
         if (i > 20) {
