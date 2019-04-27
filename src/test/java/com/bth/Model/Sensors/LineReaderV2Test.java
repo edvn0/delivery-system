@@ -33,7 +33,7 @@ public class LineReaderV2Test {
 
     int ret = LineReaderV2.directionToMove(finalValues);
 
-    assertEquals("Sensors found a black line to the right, should return 1 (right)", 7, ret);
+    assertEquals("Sensors found a black line to the right, should return 1 (right)", 1, ret);
   }
 
   @Test
