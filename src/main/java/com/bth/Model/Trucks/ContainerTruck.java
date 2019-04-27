@@ -4,8 +4,8 @@ import com.bth.Model.Truck;
 
 public class ContainerTruck extends Truck {
 
-  private String name;
-  private int id;
+  private final String name;
+  private final int id;
 
   public ContainerTruck(String name, int id) {
     this.name = name;

@@ -20,13 +20,13 @@ import java.util.concurrent.Executors;
 
 public class DTThreadPooledServer extends Thread {
 
-  protected int serverPort;
-  protected ServerSocket serverSocket = null;
-  protected boolean isStopped = false;
-  protected Thread runningThread = null;
+  private final int serverPort;
+  private ServerSocket serverSocket = null;
+  private boolean isStopped = false;
+  private Thread runningThread = null;
   protected ExecutorService threadPool = Executors.newFixedThreadPool(10);
-  protected SocketThread socket;
-  private String threadName;
+  private SocketThread socket;
+  private final String threadName;
 
   public DTThreadPooledServer(String name, int port) {
     this.threadName = name;
@@ -44,7 +44,7 @@ public class DTThreadPooledServer extends Thread {
     System.out.println("Server Started.");
     while (!isStopped()) {
 
-      Socket clientSocket = null;
+      Socket clientSocket;
       try {
         clientSocket = this.serverSocket.accept();
       } catch (IOException e) {

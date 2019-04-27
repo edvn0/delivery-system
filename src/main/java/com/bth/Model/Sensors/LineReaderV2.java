@@ -31,22 +31,22 @@ public class LineReaderV2 extends BaseSensor {
   /**
    * Line Follower
    */
-  public static final String PID = "PID";
+  private static final String PID = "PID";
 
   /**
    * Line Follower - all values
    */
-  public static final String PID_ALL = "PID-ALL";
+  private static final String PID_ALL = "PID-ALL";
 
   /**
    * Calibrated values
    */
-  public static final String CAL = "CAL";
+  private static final String CAL = "CAL";
 
   /**
    * Uncalibrated values
    */
-  public static final String RAW = "RAW";
+  private static final String RAW = "RAW";
 
   private final Set<String> trackingAllowedModeList = new HashSet<>(
       Arrays.asList(PID, PID_ALL, CAL, RAW));
@@ -188,7 +188,7 @@ public class LineReaderV2 extends BaseSensor {
    *
    * @param cmd the letter that identifies the command
    */
-  public void sendCommand(final String cmd) {
+  private void sendCommand(final String cmd) {
     this.setStringAttribute("command", cmd);
   }
 

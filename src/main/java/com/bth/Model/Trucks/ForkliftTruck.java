@@ -5,7 +5,7 @@ import com.bth.Model.Truck;
 public class ForkliftTruck extends Truck {
 
   private String name;
-  private int id;
+  private final int id;
 
   public ForkliftTruck(String name, int id) {
     this.name = name;

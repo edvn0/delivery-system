@@ -7,8 +7,8 @@ import lejos.hardware.port.SensorPort;
 
 public abstract class Truck {
 
-  protected static int HALF_SECOND = 500;
-  private static double minVoltage = 7.100d;
+  protected static final int HALF_SECOND = 500;
+  private static final double minVoltage = 7.100d;
 
   //Synchronization variables between threads to allow intra thread communication
   //Main variable for stopping execution
@@ -20,8 +20,8 @@ public abstract class Truck {
   public static boolean runThreadIsStarted = false;
   public static boolean runThreadIsExecuted = false;
 
-  public static Port[] motorPorts = {MotorPort.A, MotorPort.B, MotorPort.C, MotorPort.D,};
-  public static Port[] sensorPorts = {SensorPort.S1, SensorPort.S2, SensorPort.S3, SensorPort.S4};
+  public static final Port[] motorPorts = {MotorPort.A, MotorPort.B, MotorPort.C, MotorPort.D,};
+  public static final Port[] sensorPorts = {SensorPort.S1, SensorPort.S2, SensorPort.S3, SensorPort.S4};
 
   /***
    * Moves the truck in a direction,

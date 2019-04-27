@@ -21,10 +21,10 @@ public class SocketThread extends Thread {
 
   private Thread t;
 
-  protected Socket clientSocket = null;
-  protected String serverText = null;
-  protected BufferedReader reader;
-  protected BufferedWriter writer;
+  private Socket clientSocket;
+  private String serverText;
+  private BufferedReader reader;
+  private BufferedWriter writer;
 
   public SocketThread(Socket clientSocket, String serverText) {
     this.clientSocket = clientSocket;
@@ -105,8 +105,6 @@ public class SocketThread extends Thread {
       if (!input.equals("")) {
         switch (input) {
           case "RUN":
-            Truck.inputCommandSCS = line;
-            break;
           case "LEFT-PRESS":
             Truck.inputCommandSCS = line;
             break;

@@ -1,5 +1,6 @@
 package com.bth.Model.Sensors;
 
+import static com.bth.Utilities.ShippingSystemUtilities.directionToMove;
 import static com.bth.Utilities.ShippingSystemUtilities.splitArray;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
@@ -12,7 +13,8 @@ import org.junit.Test;
 
 public class LineReaderV2Test {
 
-  int[] values, indices;
+  private int[] values;
+  private int[] indices;
 
   @Before
   public void setUp() throws Exception {
@@ -31,7 +33,7 @@ public class LineReaderV2Test {
 
     List<int[]> finalValues = splitArray(values, 3, indices);
 
-    int ret = LineReaderV2.directionToMove(finalValues);
+    int ret = directionToMove(finalValues);
 
     assertEquals("Sensors found a black line to the right, should return 1 (right)", 1, ret);
   }
@@ -43,7 +45,7 @@ public class LineReaderV2Test {
 
     List<int[]> finalValues = splitArray(values, 3, indices);
 
-    int ret = LineReaderV2.directionToMove(finalValues);
+    int ret = directionToMove(finalValues);
 
     assertEquals("Sensors found a black line to the left, should return -1 (left)", -1, ret);
   }
@@ -55,7 +57,7 @@ public class LineReaderV2Test {
 
     List<int[]> finalValues = splitArray(values, 3, indices);
 
-    int ret = LineReaderV2.directionToMove(finalValues);
+    int ret = directionToMove(finalValues);
 
     assertEquals("Sensors found a black line in the middle, should return 0 (do nothing)", 0,
         ret);
@@ -68,7 +70,7 @@ public class LineReaderV2Test {
 
     List<int[]> finalValues = splitArray(values, indices.length, indices);
 
-    int ret = LineReaderV2.directionToMove(finalValues);
+    int ret = directionToMove(finalValues);
 
     assertEquals("Sensors found a black line to the left, direction should be -1 (left)", -1,
         ret);
@@ -81,7 +83,7 @@ public class LineReaderV2Test {
 
     List<int[]> finalValues = splitArray(values, indices.length, indices);
 
-    int ret = LineReaderV2.directionToMove(finalValues);
+    int ret = directionToMove(finalValues);
 
     assertEquals("Sensors found a black line to the right, direction should be 1 (right)", 1,
         ret);
@@ -95,7 +97,7 @@ public class LineReaderV2Test {
 
     List<int[]> finalValues = splitArray(values, 8, indices);
 
-    int ret = LineReaderV2.directionToMove(finalValues);
+    int ret = directionToMove(finalValues);
 
     assertEquals("Sensors found a black line everywhere, must stop. Will return 402.", 402,
         ret);
@@ -108,7 +110,7 @@ public class LineReaderV2Test {
 
     List<int[]> finalValues = splitArray(values, 8, indices);
 
-    int ret = LineReaderV2.directionToMove(finalValues);
+    int ret = directionToMove(finalValues);
 
     assertNotEquals(
         "Sensors did not find a black line everywhere, does not need to stop. Will not return 402.",
@@ -122,7 +124,7 @@ public class LineReaderV2Test {
 
     List<int[]> finalValues = splitArray(values);
 
-    int ret = LineReaderV2.directionToMove(finalValues);
+    int ret = directionToMove(finalValues);
 
     assertEquals("Sensors found a black line to the right, should return 1 (right)", 1, ret);
   }

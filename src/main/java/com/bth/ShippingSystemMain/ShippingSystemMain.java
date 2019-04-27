@@ -3,7 +3,7 @@ package com.bth.ShippingSystemMain;
 import com.bth.Controller.ShippingSystemController;
 import com.bth.Model.Trucks.DeliveryTruck;
 
-public class ShippingSystemMain {
+class ShippingSystemMain {
 
   public static final boolean DEV = true;
 

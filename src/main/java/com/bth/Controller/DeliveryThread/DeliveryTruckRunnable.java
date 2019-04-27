@@ -7,7 +7,7 @@ import lejos.utility.Delay;
 public class DeliveryTruckRunnable extends Thread implements Runnable {
 
   private Thread thread;
-  private String id;
+  private final String id;
   private DeliveryTruck truck;
 
   public DeliveryTruckRunnable(String id) {
@@ -25,7 +25,7 @@ public class DeliveryTruckRunnable extends Thread implements Runnable {
     }
   }
 
-  private boolean startMotors() {
+  private void startMotors() {
     /*TODO: YOUR CODE HERE,
        CHECK THIS DOCUMENTATION TO UNDERSTAND HOW TO RUN THIS TRUCK,
        AND HOW TO WRITE CODE:
@@ -40,7 +40,6 @@ public class DeliveryTruckRunnable extends Thread implements Runnable {
       Delay.msDelay(1000);
       Truck.runThreadIsExecuted = true;
     }
-    return true;
   }
 
   public void start() {

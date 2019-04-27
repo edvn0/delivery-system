@@ -22,28 +22,28 @@ public class DeliveryTruck extends Truck {
   private static final double leastDistance = 0.25; // 25 centimeters.
 
   //motor for drive forwards and backwards - connected to motor port D
-  public EV3MediumRegulatedMotor motorDrive;
+  private final EV3MediumRegulatedMotor motorDrive;
   //motor for steering - connected to motor port C
-  public EV3MediumRegulatedMotor motorSteer;
+  private final EV3MediumRegulatedMotor motorSteer;
 
   //motor for crane lifting - connected multiplexer port M1
   private EV3LargeRegulatedMotor craneRotation;
   //motor for crane lifting - connected to motor port B
-  public EV3MediumRegulatedMotor extender;
+  private final EV3MediumRegulatedMotor extender;
   //motor for grabber - connected to motor port A
   public EV3MediumRegulatedMotor craneGrabber;
 
   //sensor for proximity - connect to sensor port S1
-  private EV3UltrasonicSensor sensorProximity;
+  private final EV3UltrasonicSensor sensorProximity;
   //sensor for line reading - connected to sensor port S3
-  private LineReaderV2 lineReader;
+  private final LineReaderV2 lineReader;
   //sensor for crane rotation movement detection S4
   public EV3TouchSensor touchSensor;
 
-  private String name;
-  private int id;
-  private HashMap<Port, Double> speeds;
-  private ArrayList<Double> history;
+  private final String name;
+  private final int id;
+  private final HashMap<Port, Double> speeds;
+  private final ArrayList<Double> history;
 
   public DeliveryTruck(String name, int id) {
 
@@ -218,7 +218,7 @@ public class DeliveryTruck extends Truck {
   }
 
   private double getSpeed(Port port) {
-    return this.speeds.get(port).doubleValue();
+    return this.speeds.get(port);
   }
 
   @Override
