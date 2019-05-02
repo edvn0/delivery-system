@@ -188,17 +188,20 @@ public class DeliveryTruck extends Truck {
     }
   }
 
+  // Runs the truck indefinitely. (well 20 iterations, but you can change that.)
+  //
   public void runTruck() {
+    int iterations = 20;
+
     lineReader.wake();
     motorDrive.setSpeed(100);
     motorSteer.setSpeed(360);
-    motorSteer.setAcceleration(300);
     int i = 0;
     while (true) {
       if (lineReader.isFollowing()) {
         readLines();
         System.out.println("Loop:" + i++);
-        if (i > 20) {
+        if (i > iterations) {
           break;
         }
       }
@@ -248,6 +251,9 @@ public class DeliveryTruck extends Truck {
     return false;
   }
 
+  /**
+   * Main issues should be here, but test everything correctly.
+   */
   @Override
   public void readLines() {
     int previousDirection = 0;

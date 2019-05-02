@@ -86,7 +86,6 @@ public class LineReaderV2Test {
 
     assertEquals("Sensors found a black line to the right, direction should be 1 (right)", 1,
         ret);
-
   }
 
   @Test
