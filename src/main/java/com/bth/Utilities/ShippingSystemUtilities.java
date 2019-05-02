@@ -1,6 +1,5 @@
 package com.bth.Utilities;
 
-import com.sun.istack.internal.NotNull;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -23,7 +22,7 @@ public class ShippingSystemUtilities {
    * @param splitIndices Size of pieces.
    * @return ArrayList of the split int arrays.
    */
-  public static List<int[]> splitArray(@NotNull int[] array, int num, int[] splitIndices) {
+  public static List<int[]> splitArray(int[] array, int num, int[] splitIndices) {
     List<int[]> ints = new ArrayList<>();
 
     // Checks to see if you even can split the array into these chunks...
