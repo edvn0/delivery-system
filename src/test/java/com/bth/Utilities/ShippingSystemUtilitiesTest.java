@@ -1,11 +1,12 @@
 package com.bth.Utilities;
 
+import static com.bth.Utilities.ShippingSystemUtilities.shouldStop;
 import static com.bth.Utilities.ShippingSystemUtilities.splitArray;
+import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
 import java.util.List;
 import org.junit.After;
-import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
@@ -44,7 +45,7 @@ public class ShippingSystemUtilitiesTest {
       test = false;
     }
 
-    Assert.assertTrue("Should be true", test);
+    assertTrue("Should be true", test);
   }
 
   @Test
@@ -72,11 +73,22 @@ public class ShippingSystemUtilitiesTest {
     } else {
       test = false;
     }
-    Assert.assertTrue("Should be true", test);
+    assertTrue("Should be true", test);
   }
 
   @Test
   public void splitIntegerArrayTestThree() {
+
+  }
+
+  @Test
+  public void directionToMoveTestOne() {
+    values = new int[]{14, 15, 13, 12, 11, 10, 14, 18};
+    List<int[]> test = splitArray(values);
+
+    boolean shouldStop = shouldStop(test);
+
+    assertTrue("Should stop", shouldStop);
 
   }
 }

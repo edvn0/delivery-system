@@ -193,6 +193,7 @@ public class LineReaderV2 extends BaseSensor {
   }
 
 
+  // This might be an issue, just change the return to true if this is the issue.
   public boolean isFollowing() {
     int iterations = 3;
     int threshold = 65;
