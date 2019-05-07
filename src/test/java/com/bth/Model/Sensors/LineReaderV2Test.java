@@ -4,7 +4,6 @@ import static com.bth.Model.Sensors.LineReaderV2.directionToMove;
 import static com.bth.Utilities.ShippingSystemUtilities.directionToMove;
 import static com.bth.Utilities.ShippingSystemUtilities.splitArray;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 
 import com.bth.Model.Trucks.DeliveryTruck;
@@ -93,7 +92,6 @@ public class LineReaderV2Test {
 
     assertEquals("Sensors found a black line to the right, direction should be 1 (right)", 1,
         ret);
-
   }
 
   @Test
@@ -118,8 +116,8 @@ public class LineReaderV2Test {
 
     int ret = directionToMove(finalValues);
 
-    assertNotEquals(
-        "Sensors did not find a black line everywhere, does not need to stop. Will not return 402.",
+    assertEquals(
+        "Sensors did find a black line everywhere, needs to stop. Should return 402.",
         402,
         ret);
   }

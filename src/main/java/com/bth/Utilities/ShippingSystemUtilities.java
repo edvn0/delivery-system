@@ -17,7 +17,7 @@ public class ShippingSystemUtilities {
    * Example:
    * int[]{10,10,1,1,2,3,4} = @param array, 3 = @param num, int[]{3,1,3} = @param splitIndex
    * int[]{10,10,1,1,2,3,4} becomes int[]{10,10,1}, int[]{1}, int[]{2,3,4}
-   * @param array Array to be split.
+   * @param array Array to be partitioned.
    * @param num Number of pieces.
    * @param splitIndices Size of pieces.
    * @return ArrayList of the split int arrays.
@@ -73,9 +73,10 @@ public class ShippingSystemUtilities {
     return splitArray(array, 3, new int[]{3, 2, 3});
   }
 
-  /***
-   * Returns the direction for the vehicle to move, based on values sent in by
-   * the line reader sensors.
+  /**
+   * Returns the direction for the vehicle to move, based on values sent in by the line reader
+   * sensors.
+   *
    * @param values CAL-values from the sensors.
    * @return element in {-1,0,1} isomorphic to {left, middle, right}.
    *
@@ -88,20 +89,25 @@ public class ShippingSystemUtilities {
       return 402;
     }
 
-    HashMap<Integer, Double> positionAndValueMap = new HashMap<>();
+    HashMap<Double, Integer> valuesAndSensor = new HashMap<>();
+
     double[] results = new double[values.size()];
     int comparisons = results.length;
 
     for (int i = 0; i < results.length; i++) {
       int[] tempValues = values.get(i);
       results[i] = (double) IntStream.of(tempValues).sum() / tempValues.length;
-      positionAndValueMap.put(i, results[i]);
+      valuesAndSensor.put(results[i], i);
     }
 
     double min = findMinimum(results);
-    int index = getKeyByValue(positionAndValueMap, min);
+    int index = valuesAndSensor.get(min);
 
+    // Busy work heuristic check if we are seeing something not white.
     if (DoubleStream.of(results).sum() / results.length <= 80) {
+
+      // TODO: refactor, this is really bad. Make it more scalable!!!
+      // This is a "nice" solution to the hardcoded solution with either 6 inputs or 3.
       if (comparisons % 2 == 0) {
         switch (index) {
           case 0:
@@ -130,20 +136,31 @@ public class ShippingSystemUtilities {
 
   /**
    * Compares all the values in the input array, if they are all the same, and are not white, we
-   * have reached a stop.
+   * have reached a stop. Allows the value to be between 0 <= 25.
    *
    * @param values input CAL values from the line reader.
    * @return should this vehicle stop? true for yes.
    */
-  private static boolean shouldStop(List<int[]> values) {
-    boolean white = values.get(0)[0] >= 96;
-    if (white) {
+  public static boolean shouldStop(List<int[]> values) {
+    int compare = 0;
+    int offset = 6;
+
+    for (int[] vals : values) {
+      compare += IntStream.of(vals).sum() / vals.length;
+    }
+
+    compare /= values.size();
+
+    // If this one is white, we should stop.
+    if (compare >= 90) {
       return true;
     }
-    int compare = values.get(0)[0];
+
+    // Check if all values are black...
     for (int[] ints : values) {
       for (int i : ints) {
-        if (i != compare) {
+        if (!(i >= compare - offset && i - offset <= compare)) {
+          // compare = 25 (approx) => this returns false if i \notin [22,28]
           return false;
         }
       }

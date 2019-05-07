@@ -36,7 +36,7 @@ public class DeliveryTruck extends Truck {
   //sensor for proximity - connect to sensor port S1
   private final EV3UltrasonicSensor sensorProximity;
   //sensor for line reading - connected to sensor port S3
-  private LineReaderV2 lineReader;
+  private final LineReaderV2 lineReader;
   //sensor for crane rotation movement detection S4
   public EV3TouchSensor touchSensor;
 
@@ -49,8 +49,8 @@ public class DeliveryTruck extends Truck {
 
     motorDrive = new EV3MediumRegulatedMotor(Truck.motorPorts[3]);   // PORT D
     motorSteer = new EV3MediumRegulatedMotor(Truck.motorPorts[2]);   // PORT C
-    lineReader = new LineReaderV2(Truck.sensorPorts[2]);
     extender = new EV3MediumRegulatedMotor(Truck.motorPorts[1]); // PORT S2
+    lineReader = new LineReaderV2(Truck.sensorPorts[2]);   // PORT S3
     sensorProximity = new EV3UltrasonicSensor(Truck.sensorPorts[0]);   // PORT S1
 
     Runtime.getRuntime().addShutdownHook(new Thread(() -> {
@@ -189,20 +189,21 @@ public class DeliveryTruck extends Truck {
   }
 
   // Runs the truck indefinitely. (well 20 iterations, but you can change that.)
+  //
   public void runTruck() {
     int iterations = 20;
 
+    lineReader.wake();
     motorDrive.setSpeed(100);
     motorSteer.setSpeed(360);
     int i = 0;
     while (true) {
       if (lineReader.isFollowing()) {
         readLines();
-        System.out.println("Loop:" + i);
+        System.out.println("Loop:" + i++);
         if (i > iterations) {
           break;
         }
-        i++;
       }
     }
     this.stop();
