@@ -2,6 +2,7 @@ package com.bth.ShippingSystemMain;
 
 import com.bth.Controller.ShippingSystemController;
 import com.bth.Model.Trucks.DeliveryTruck;
+import lejos.utility.Delay;
 
 class ShippingSystemMain {
 

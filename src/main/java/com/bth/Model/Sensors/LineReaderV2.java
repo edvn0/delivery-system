@@ -192,7 +192,7 @@ public class LineReaderV2 extends BaseSensor {
     this.setStringAttribute("command", cmd);
   }
 
-
+  // This might be an issue, just change the return to true if this is the issue.
   public boolean isFollowing() {
     int iterations = 3;
     int threshold = 65;

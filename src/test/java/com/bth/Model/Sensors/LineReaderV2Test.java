@@ -1,12 +1,15 @@
 package com.bth.Model.Sensors;
 
+import static com.bth.Model.Sensors.LineReaderV2.directionToMove;
 import static com.bth.Utilities.ShippingSystemUtilities.directionToMove;
 import static com.bth.Utilities.ShippingSystemUtilities.splitArray;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNull;
 
+import com.bth.Model.Trucks.DeliveryTruck;
 import java.util.List;
+import javax.sound.sampled.Line;
 import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
@@ -16,9 +19,12 @@ public class LineReaderV2Test {
   private int[] values;
   private int[] indices;
 
+  private DeliveryTruck lineReaderV2;
+
   @Before
   public void setUp() throws Exception {
     values = new int[]{92, 92, 10, 4, 7, 1, 1, 1};
+    lineReaderV2 = new DeliveryTruck("lineReader");
   }
 
   @After
