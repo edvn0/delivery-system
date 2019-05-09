@@ -16,8 +16,8 @@ class ShippingSystemMain {
 
     ShippingSystemController controller = new ShippingSystemController(null, truck);
 
-    //controller.getDeliveryTruck().runTruck();
-  controller.getDeliveryTruck().move(0);
+    controller.getDeliveryTruck().runTruck();
+
     System.exit(0);
   }
 }
