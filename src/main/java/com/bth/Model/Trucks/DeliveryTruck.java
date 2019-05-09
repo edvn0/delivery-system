@@ -189,23 +189,85 @@ public class DeliveryTruck extends Truck {
   }
 
   public void runTruck() {
-    lineReader.wake();
-    motorDrive.setSpeed(100);
-    motorSteer.setSpeed(360);
-    motorSteer.setAcceleration(300);
+    //lineReader.wake();
+    //motorDrive.setSpeed(100);
+    motorSteer.setSpeed(100);
+    //motorSteer.setAcceleration(300);
     int i = 0;
+    /*
     while (true) {
       if (lineReader.isFollowing()) {
         readLines();
         System.out.println("Loop:" + i++);
-        if (i > 50) {
+        if (i > 10) {
           break;
         }
       }
     }
+
+    */
+    //motorDrive.stop();
+    //motorSteer.stop();
+    rotate180();
+    startingPosition();
     this.stop();
+
+
   }
 
+  private void rotate180(){
+
+    motorDrive.setSpeed(500);
+
+    motorSteer.rotateTo(300, true);
+    msDelay(3000);
+    motorSteer.stop();
+
+    motorDrive.backward();
+    msDelay(11000);
+    motorDrive.stop();
+
+    startingPosition();
+
+    motorDrive.forward();
+    msDelay(2000);
+    motorDrive.stop();
+
+    motorSteer.rotateTo(-400, true);
+    msDelay(3000);
+    motorSteer.stop();
+
+    motorDrive.forward();
+    msDelay(8000);
+    motorDrive.stop();
+
+
+    startingPosition();
+
+
+
+  }
+
+
+  private void startingPosition(){
+
+    motorDrive.stop();
+    motorSteer.stop();
+
+    System.out.println("bajs");
+    motorSteer.rotateTo(400, true);
+    msDelay(3000);
+    motorSteer.stop();
+    System.out.println("snopp");
+    msDelay(3000);
+    motorSteer.rotateTo(-6, true);
+    msDelay(3000);
+    motorSteer.stop();
+    System.out.println("kiss");
+
+
+
+  }
   // TODO: fix the integration with a localhost server.
   public static void doStuff(WebServer server) {
     System.out.println("Running!");
