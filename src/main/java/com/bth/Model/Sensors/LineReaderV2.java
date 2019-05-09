@@ -199,11 +199,17 @@ public class LineReaderV2 extends BaseSensor {
     int threshold = 65;
 
     int mean = IntStream.of(this.generateValues(iterations)).sum();
+    System.out.println(mean);
 
     return mean <= threshold;
   }
 
-  private int[] generateValues(int iterations) {
+  /**
+   * Generate a mean value array for the line reader, over some amount of iterations.
+   *
+   * @param iterations how many times should we read?
+   */
+  public int[] generateValues(int iterations) {
     int[] values = new int[8];
 
     for (int i = 0; i < iterations; i++) {
@@ -213,10 +219,9 @@ public class LineReaderV2 extends BaseSensor {
       }
     }
 
-    for (int i = 0; i < iterations; i++) {
+    for (int i = 0; i < values.length; i++) {
       values[i] /= iterations;
     }
-
     return values;
   }
 }

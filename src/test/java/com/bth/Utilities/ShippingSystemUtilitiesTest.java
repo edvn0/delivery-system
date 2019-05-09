@@ -1,8 +1,11 @@
 package com.bth.Utilities;
 
+import static com.bth.Utilities.ShippingSystemUtilities.followTheLine;
 import static com.bth.Utilities.ShippingSystemUtilities.shouldStop;
 import static com.bth.Utilities.ShippingSystemUtilities.splitArray;
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+
 
 import java.util.Arrays;
 import java.util.List;
@@ -77,11 +80,6 @@ public class ShippingSystemUtilitiesTest {
   }
 
   @Test
-  public void splitIntegerArrayTestThree() {
-
-  }
-
-  @Test
   public void directionToMoveTestOne() {
     values = new int[]{14, 15, 13, 12, 11, 10, 14, 18};
     List<int[]> test = splitArray(values);
@@ -90,5 +88,19 @@ public class ShippingSystemUtilitiesTest {
 
     assertTrue("Should stop", shouldStop);
 
+  }
+
+  @Test
+  public void followTheLineTestOne() {
+    values = new int[]{100,100,100,19,12,10,53,100};
+    List<int[]> test = splitArray(values, 8, new int[]{1,1,1,1,1,1,1,1});
+
+    for (int[] ints : test) {
+      System.out.print(Arrays.toString(ints) + ", ");
+    }
+
+    int val = followTheLine(test);
+
+    assertEquals("Should be 30", 30, val);
   }
 }

@@ -21,7 +21,12 @@ public abstract class Truck {
   public static boolean runThreadIsExecuted = false;
 
   public static final Port[] motorPorts = {MotorPort.A, MotorPort.B, MotorPort.C, MotorPort.D,};
-  public static final Port[] sensorPorts = {SensorPort.S1, SensorPort.S2, SensorPort.S3, SensorPort.S4};
+  public static final Port[] sensorPorts = {SensorPort.S1, SensorPort.S2, SensorPort.S3,
+      SensorPort.S4};
+
+  public static void handlePath(String path) {
+    System.out.println("In Truck, will handle path: " + path);
+  }
 
   /***
    * Moves the truck in a direction,

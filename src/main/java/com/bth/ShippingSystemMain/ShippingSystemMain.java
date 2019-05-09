@@ -8,7 +8,8 @@ class ShippingSystemMain {
 
   public static final boolean DEV = true;
 
-  public static void main(String[] args) { java.awt.EventQueue.invokeLater(ShippingSystemMain::run);
+  public static void main(String[] args) {
+    java.awt.EventQueue.invokeLater(ShippingSystemMain::run);
   }
 
   private static void run() {
