@@ -1,10 +1,9 @@
 package com.bth.Model.Trucks;
 
-import static com.bth.Utilities.ShippingSystemUtilities.directionToMove;
+import static com.bth.Utilities.ShippingSystemUtilities.followTheLine;
 import static com.bth.Utilities.ShippingSystemUtilities.splitArray;
 import static lejos.utility.Delay.msDelay;
 
-import com.bth.Controller.WebAPI.WebServer;
 import com.bth.Model.Sensors.LineReaderV2;
 import com.bth.Model.Truck;
 import ev3dev.actuators.lego.motors.EV3LargeRegulatedMotor;
@@ -16,6 +15,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import lejos.hardware.port.Port;
+import lejos.utility.Delay;
 
 public class DeliveryTruck extends Truck {
 
@@ -44,6 +44,8 @@ public class DeliveryTruck extends Truck {
   private final int id;
   private final HashMap<Port, Double> speeds;
   private final ArrayList<Double> history;
+
+  private int prevDirection = 0;
 
   public DeliveryTruck(String name, int id) {
 
@@ -189,94 +191,36 @@ public class DeliveryTruck extends Truck {
   }
 
   public void runTruck() {
-    //lineReader.wake();
-    //motorDrive.setSpeed(100);
-    motorSteer.setSpeed(100);
-    //motorSteer.setAcceleration(300);
+
+    startingPosition();
+
+    Delay.msDelay(500);
+
+    motorDrive.setSpeed(175);
+    motorSteer.setSpeed(175);
+
     int i = 0;
-    /*
-    while (true) {
-      if (lineReader.isFollowing()) {
-        readLines();
-        System.out.println("Loop:" + i++);
-        if (i > 10) {
-          break;
-        }
+    int iterations = 15;
+    while (i < iterations) {
+      readLines();
+      if (i % 5 == 0) {
+        System.out.println("Loop " + i);
       }
+      i++;
     }
-
-    */
-    //motorDrive.stop();
-    //motorSteer.stop();
-    rotate180();
-    startingPosition();
     this.stop();
-
-
   }
 
-  private void rotate180(){
-
-    motorDrive.setSpeed(500);
-
-    motorSteer.rotateTo(300, true);
-    msDelay(3000);
-    motorSteer.stop();
-
-    motorDrive.backward();
-    msDelay(11000);
-    motorDrive.stop();
-
-    startingPosition();
-
-    motorDrive.forward();
-    msDelay(2000);
-    motorDrive.stop();
-
-    motorSteer.rotateTo(-400, true);
-    msDelay(3000);
-    motorSteer.stop();
-
-    motorDrive.forward();
-    msDelay(8000);
-    motorDrive.stop();
-
-
-    startingPosition();
-
-
-
-  }
-
-
-  private void startingPosition(){
-
+  private void startingPosition() {
     motorDrive.stop();
     motorSteer.stop();
-
-    System.out.println("bajs");
     motorSteer.rotateTo(400, true);
     msDelay(3000);
     motorSteer.stop();
-    System.out.println("snopp");
     msDelay(3000);
     motorSteer.rotateTo(-6, true);
     msDelay(3000);
     motorSteer.stop();
-    System.out.println("kiss");
-
-
-
-  }
-  // TODO: fix the integration with a localhost server.
-  public static void doStuff(WebServer server) {
-    System.out.println("Running!");
-    while (server.isRunning) {
-
-      System.out.println(server.getCommand());
-      msDelay(500);
-    }
-    System.out.println("Stop running!");
   }
 
   private double getSpeed(Port port) {
@@ -313,23 +257,36 @@ public class DeliveryTruck extends Truck {
   @Override
   public void readLines() {
     int previousDirection = 0;
-    List<int[]> values = splitArray(lineReader.getCALValues(), 3, new int[]{3, 2, 3});
+    List<int[]> values = splitArray(lineReader.generateValues(1), 8,
+        new int[]{1, 1, 1, 1, 1, 1, 1, 1});
+
+    for (int[] ints : values) {
+      System.out.print(ints[0] + ", ");
+    }
+
+    Delay.msDelay(2000);
 
     if (values != null) {
-      previousDirection = directionToMove(values);
+      //previousDirection = directionToMove(values);
+      previousDirection = followTheLine(values);
     }
 
     if (previousDirection == 402) {
       motorDrive.stop();
       motorSteer.stop();
       msDelay(500);
+      System.out.println("Lost line.");
+
+      motorSteer.rotate(prevDirection);
+
       return;
     }
 
-    motorSteer.rotate(previousDirection * 360, true);
-    msDelay(500);
+    motorSteer.rotate(previousDirection, true);
+    msDelay(100);
 
     motorDrive.backward();
+    prevDirection = previousDirection;
   }
 
   private HashMap<Port, Double> initSpeeds(double[] speeds) {

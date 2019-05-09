@@ -1,7 +1,5 @@
 package com.bth.Controller;
 
-import com.bth.Controller.DeliveryThread.DeliveryTruckRunnable;
-import com.bth.Controller.Thread.DTThreadPooledServer;
 import com.bth.Model.Truck;
 import com.bth.Model.Trucks.ContainerTruck;
 import com.bth.Model.Trucks.DeliveryTruck;
@@ -17,7 +15,6 @@ import java.util.ArrayList;
 public class ShippingSystemController {
 
   // Server stuff
-  private DTThreadPooledServer pooledServer;
   private final DeliveryTruck truck;
 
   // Models
@@ -39,11 +36,6 @@ public class ShippingSystemController {
   }
 
   private void initializeRunThread(String id) {
-    DeliveryTruckRunnable run;
-    // NEW THING HERE
-    run = new DeliveryTruckRunnable(id);
-    run.setTruck(truck);
-    run.start();
     Truck.runThreadIsStarted = true;
     Truck.runThreadIsExecuted = false;
   }
@@ -63,46 +55,6 @@ public class ShippingSystemController {
         Truck.isRunning = false;
       }
     }
-  }
-
-  public void setPooledServer(DTThreadPooledServer dtThreadPooledServer) {
-    this.pooledServer = dtThreadPooledServer;
-  }
-
-  public void runPooledServer(DTThreadPooledServer pooledServer) {
-    while (Truck.isRunning) {
-      System.out.println("Outputting truck command in DTThreadPool: " + Truck.inputCommandSCS);
-      if (Truck.inputCommandSCS.equals("KILL")) {
-        Truck.isRunning = false;
-      }
-
-      if (Truck.inputCommandSCS.equals("RUN") && (!Truck.runThreadIsStarted)) {
-        initializeRunThread("RUN Thread");
-      }
-
-      if (!Truck.runThreadIsExecuted) {
-        try {
-          Thread.sleep(30 * 100);
-        } catch (InterruptedException e) {
-          e.printStackTrace();
-        }
-      } else {
-        Truck.inputCommandSCS = "";
-        Truck.runThreadIsStarted = false;
-      }
-
-      if (Truck.outputCommandSCS.equals("FINISHED")) {
-        System.out.println("Main is finished.");
-        pooledServer.isRunning();
-      }
-
-    }
-
-    pooledServer.stopServerSocket();
-  }
-
-  public DTThreadPooledServer getPooledServer() {
-    return this.pooledServer;
   }
 
   public DeliveryTruck getDeliveryTruck() {

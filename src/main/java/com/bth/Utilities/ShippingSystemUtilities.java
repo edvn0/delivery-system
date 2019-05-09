@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
 import java.util.Objects;
-import java.util.stream.DoubleStream;
 import java.util.stream.IntStream;
 
 public class ShippingSystemUtilities {
@@ -65,12 +64,12 @@ public class ShippingSystemUtilities {
    * Splits an int array into standard size for the LineReader.
    *
    * @param array int array to be split
-   * @return ArrayList with 3 ints, sizes 3,2,3.
+   * @return ArrayList with 8 ints, sizes 1,1,1,1,1,1,1,1.
    *
    * see {@link #splitArray(int[], int, int[])}
    */
   public static List<int[]> splitArray(int[] array) {
-    return splitArray(array, 3, new int[]{3, 2, 3});
+    return splitArray(array, 8, new int[]{1, 1, 1, 1, 1, 1, 1, 1});
   }
 
   /**
@@ -92,7 +91,6 @@ public class ShippingSystemUtilities {
     HashMap<Double, Integer> valuesAndSensor = new HashMap<>();
 
     double[] results = new double[values.size()];
-    int comparisons = results.length;
 
     for (int i = 0; i < results.length; i++) {
       int[] tempValues = values.get(i);
@@ -104,32 +102,55 @@ public class ShippingSystemUtilities {
     int index = valuesAndSensor.get(min);
 
     // Busy work heuristic check if we are seeing something not white.
-    if (DoubleStream.of(results).sum() / results.length <= 80) {
+    // (DoubleStream.of(results).sum() / results.length) <= 80
+    System.out.println(index);
+    switch (index) {
+      case 0:
+        return -1;
+      case 1:
+      case 2:
+        return 0;
+      case 3:
+        return 1;
+    }
+    return 0;
+  }
 
-      // TODO: refactor, this is really bad. Make it more scalable!!!
-      // This is a "nice" solution to the hardcoded solution with either 6 inputs or 3.
-      if (comparisons % 2 == 0) {
-        switch (index) {
-          case 0:
-          case 1:
-            return -1;
-          case 2:
-          case 3:
-            return 0;
-          case 4:
-          case 5:
-            return 1;
-        }
-      } else {
-        switch (index) {
-          case 0:
-            return -1;
-          case 1:
-            return 0;
-          case 2:
-            return 1;
-        }
-      }
+  public static int followTheLine(List<int[]> values) {
+    // X X X X X X X X //
+    boolean shouldStop = shouldStop(values);
+    if (shouldStop) {
+      return 402;
+    }
+
+    HashMap<Integer, Integer> sensorMap = new HashMap<>();
+    int k = 0;
+    for (int[] ints : values) {
+      int average = IntStream.of(ints).sum() / ints.length;
+      sensorMap.put(k++, average);
+    }
+
+    // Get the lowest value in the array, and find corresponding sensor by that value.
+    int minValue = minimumFinder(values);
+    int sensor = getKeyByValue(sensorMap, minValue);
+
+    System.out.println("Sensor " + sensor + " returned the lowest value of " + minValue);
+
+    switch (sensor) {
+      case 0:
+        return -300;
+      case 1:
+        return -150;
+      case 2:
+      case 3:
+        return 30;
+      case 4:
+      case 5:
+        return -30;
+      case 6:
+        return 150;
+      case 7:
+        return 300;
     }
     return 0;
   }
@@ -212,5 +233,16 @@ public class ShippingSystemUtilities {
     }
 
     return min;
+  }
+
+  private static int minimumFinder(List<int[]> ints) {
+    int minValue = ints.get(0)[0];
+    for (int j = 1; j < ints.size(); j++) {
+      int valueInValues = ints.get(j)[0];
+      if (valueInValues < minValue) {
+        minValue = valueInValues;
+      }
+    }
+    return minValue;
   }
 }

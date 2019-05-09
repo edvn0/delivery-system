@@ -30,7 +30,7 @@ public class ShippingSystemUtilitiesTest {
     test2 = new int[]{4, 1};
     test3 = new int[]{2, 7, 1};
     indices = new int[]{3, 2, 3};
-    List<int[]> ints = splitArray(values);
+    List<int[]> ints = splitArray(values, 3, indices);
     boolean test = true;
 
     if (values != null) {
@@ -77,11 +77,6 @@ public class ShippingSystemUtilitiesTest {
   }
 
   @Test
-  public void splitIntegerArrayTestThree() {
-
-  }
-
-  @Test
   public void directionToMoveTestOne() {
     values = new int[]{14, 15, 13, 12, 11, 10, 14, 18};
     List<int[]> test = splitArray(values);
@@ -91,4 +86,6 @@ public class ShippingSystemUtilitiesTest {
     assertTrue("Should stop", shouldStop);
 
   }
+
+
 }
