@@ -1,11 +1,8 @@
 package com.bth.Utilities;
 
-import static com.bth.Utilities.ShippingSystemUtilities.followTheLine;
 import static com.bth.Utilities.ShippingSystemUtilities.shouldStop;
 import static com.bth.Utilities.ShippingSystemUtilities.splitArray;
-import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-
 
 import java.util.Arrays;
 import java.util.List;
@@ -33,7 +30,7 @@ public class ShippingSystemUtilitiesTest {
     test2 = new int[]{4, 1};
     test3 = new int[]{2, 7, 1};
     indices = new int[]{3, 2, 3};
-    List<int[]> ints = splitArray(values);
+    List<int[]> ints = splitArray(values, 3, indices);
     boolean test = true;
 
     if (values != null) {
