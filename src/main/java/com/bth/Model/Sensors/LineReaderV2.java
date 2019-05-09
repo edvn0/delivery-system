@@ -195,10 +195,10 @@ public class LineReaderV2 extends BaseSensor {
 
   // This might be an issue, just change the return to true if this is the issue.
   public boolean isFollowing() {
-    int iterations = 3;
+    int iterations = 1;
     int threshold = 65;
 
-    int mean = IntStream.of(this.generateValues(iterations)).sum();
+    int mean = IntStream.of(this.generateValues(iterations)).sum() / iterations;
     System.out.println(mean);
 
     return mean <= threshold;

@@ -194,13 +194,19 @@ public class DeliveryTruck extends Truck {
 
     startingPosition();
 
+    Delay.msDelay(500);
+
     motorDrive.setSpeed(175);
     motorSteer.setSpeed(175);
+
     int i = 0;
     int iterations = 15;
     while (i < iterations) {
       readLines();
-      System.out.println("Loop:" + i++);
+      if (i % 5 == 0) {
+        System.out.println("Loop " + i);
+      }
+      i++;
     }
     this.stop();
   }
@@ -269,6 +275,10 @@ public class DeliveryTruck extends Truck {
       motorDrive.stop();
       motorSteer.stop();
       msDelay(500);
+      System.out.println("Lost line.");
+
+      motorSteer.rotate(prevDirection);
+
       return;
     }
 

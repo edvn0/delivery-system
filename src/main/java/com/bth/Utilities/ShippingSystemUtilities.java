@@ -64,12 +64,12 @@ public class ShippingSystemUtilities {
    * Splits an int array into standard size for the LineReader.
    *
    * @param array int array to be split
-   * @return ArrayList with 3 ints, sizes 3,2,3.
+   * @return ArrayList with 8 ints, sizes 1,1,1,1,1,1,1,1.
    *
    * see {@link #splitArray(int[], int, int[])}
    */
   public static List<int[]> splitArray(int[] array) {
-    return splitArray(array, 3, new int[]{3, 2, 3});
+    return splitArray(array, 8, new int[]{1, 1, 1, 1, 1, 1, 1, 1});
   }
 
   /**
@@ -118,34 +118,23 @@ public class ShippingSystemUtilities {
 
   public static int followTheLine(List<int[]> values) {
     // X X X X X X X X //
+    boolean shouldStop = shouldStop(values);
+    if (shouldStop) {
+      return 402;
+    }
+
     HashMap<Integer, Integer> sensorMap = new HashMap<>();
     int k = 0;
     for (int[] ints : values) {
-      sensorMap.put(k++, ints[0]);
+      int average = IntStream.of(ints).sum() / ints.length;
+      sensorMap.put(k++, average);
     }
 
-    // O O X X X X O O //
+    // Get the lowest value in the array, and find corresponding sensor by that value.
+    int minValue = minimumFinder(values);
+    int sensor = getKeyByValue(sensorMap, minValue);
 
-    // 0, 7 ta bort eller sväng fullt.
-
-    //Sensor 2,3,4,5 = Ställa hjulen rakt.
-
-    //sensor 1,6 = svänga lite.
-
-    int minValue = values.get(0)[0];
-    for (int j = 1; j < values.size(); j++) {
-      int valueInValues = values.get(j)[0];
-      if (valueInValues < minValue) {
-        minValue = valueInValues;
-      }
-    }
-
-    int sensor = 0;
-    for (Entry<Integer, Integer> entry : sensorMap.entrySet()) {
-      if (entry.getValue() == minValue) {
-        sensor = entry.getKey();
-      }
-    }
+    System.out.println("Sensor " + sensor + " returned the lowest value of " + minValue);
 
     switch (sensor) {
       case 0:
@@ -244,5 +233,16 @@ public class ShippingSystemUtilities {
     }
 
     return min;
+  }
+
+  private static int minimumFinder(List<int[]> ints) {
+    int minValue = ints.get(0)[0];
+    for (int j = 1; j < ints.size(); j++) {
+      int valueInValues = ints.get(j)[0];
+      if (valueInValues < minValue) {
+        minValue = valueInValues;
+      }
+    }
+    return minValue;
   }
 }

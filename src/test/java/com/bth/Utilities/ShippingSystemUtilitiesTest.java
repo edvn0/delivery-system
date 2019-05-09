@@ -90,17 +90,5 @@ public class ShippingSystemUtilitiesTest {
 
   }
 
-  @Test
-  public void followTheLineTestOne() {
-    values = new int[]{100,100,100,19,12,10,53,100};
-    List<int[]> test = splitArray(values, 8, new int[]{1,1,1,1,1,1,1,1});
 
-    for (int[] ints : test) {
-      System.out.print(Arrays.toString(ints) + ", ");
-    }
-
-    int val = followTheLine(test);
-
-    assertEquals("Should be 30", 30, val);
-  }
 }
