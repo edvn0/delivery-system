@@ -192,18 +192,6 @@ public class LineReaderV2 extends BaseSensor {
     this.setStringAttribute("command", cmd);
   }
 
-
-  // This might be an issue, just change the return to true if this is the issue.
-  public boolean isFollowing() {
-    int iterations = 1;
-    int threshold = 65;
-
-    int mean = IntStream.of(this.generateValues(iterations)).sum() / iterations;
-    System.out.println(mean);
-
-    return mean <= threshold;
-  }
-
   /**
    * Generate a mean value array for the line reader, over some amount of iterations.
    *

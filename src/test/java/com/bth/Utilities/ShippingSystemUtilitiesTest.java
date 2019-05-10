@@ -1,7 +1,8 @@
 package com.bth.Utilities;
 
-import static com.bth.Utilities.ShippingSystemUtilities.shouldStop;
+import static com.bth.Utilities.ShippingSystemUtilities.checkIfLostLine;
 import static com.bth.Utilities.ShippingSystemUtilities.splitArray;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.Arrays;
@@ -77,15 +78,43 @@ public class ShippingSystemUtilitiesTest {
   }
 
   @Test
-  public void directionToMoveTestOne() {
+  public void checkIfLostLineTestOne() {
     values = new int[]{14, 15, 13, 12, 11, 10, 14, 18};
     List<int[]> test = splitArray(values);
 
-    boolean shouldStop = shouldStop(test);
+    boolean shouldStop = checkIfLostLine(test);
 
     assertTrue("Should stop", shouldStop);
-
   }
 
+  @Test
+  public void checkIfLostLineTestTwo() {
+    values = new int[]{100, 100, 100, 100, 100, 100, 100, 100};
+    List<int[]> test = splitArray(values);
+
+    boolean shouldStop = checkIfLostLine(test);
+
+    assertTrue("Should stop", shouldStop);
+  }
+
+  @Test
+  public void checkIfLostLineTestThree() {
+    values = new int[]{0, 0, 0, 100, 100, 100, 100, 100};
+    List<int[]> test = splitArray(values);
+
+    boolean shouldStop = checkIfLostLine(test);
+
+    assertFalse("Should not stop", shouldStop);
+  }
+
+  @Test
+  public void checkIfLostLineTestFour() {
+    values = new int[]{34, 34, 100, 100, 100, 100, 100, 100};
+    List<int[]> test = splitArray(values);
+
+    boolean shouldStop = checkIfLostLine(test);
+
+    assertFalse("Should stop", shouldStop);
+  }
 
 }
