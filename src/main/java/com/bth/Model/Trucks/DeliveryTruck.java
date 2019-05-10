@@ -62,6 +62,8 @@ public class DeliveryTruck extends Truck {
       Truck.runThreadIsExecuted = true;
       Truck.isRunning = false;
 
+      motorSteer.rotateTo(0, true);
+
       motorDrive.stop();
       motorSteer.stop();
     }));
@@ -253,8 +255,7 @@ public class DeliveryTruck extends Truck {
   }
 
   private void handleCommand(String s) {
-    switch (s) {
-      case "kill":
+    if ("kill".equals(s)) {
     }
   }
 
@@ -308,7 +309,7 @@ public class DeliveryTruck extends Truck {
 
   @Override
   public void readLines() {
-    int dirNow = 0;
+    int dirNow;
     List<int[]> values = splitArray(lineReader.generateValues(1), 8,
         new int[]{1, 1, 1, 1, 1, 1, 1, 1});
 
