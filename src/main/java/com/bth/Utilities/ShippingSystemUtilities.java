@@ -172,7 +172,7 @@ public class ShippingSystemUtilities {
     compare /= values.size();
 
     // If this one is white, we should stop.
-    if (compare <= 25) {
+    if (compare >= 90) {
       return true;
     }
 
