@@ -13,11 +13,8 @@ class ShippingSystemMain {
 
   private static void run() {
     DeliveryTruck truck = new DeliveryTruck("Delivery Truck One", 1);
-
     ShippingSystemController controller = new ShippingSystemController(null, truck);
-
     controller.getDeliveryTruck().runTruck();
-
     System.exit(0);
   }
 }

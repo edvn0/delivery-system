@@ -192,35 +192,87 @@ public class DeliveryTruck extends Truck {
 
   public void runTruck() {
 
-    startingPosition();
+    motorDrive.setSpeed(400);
+    motorSteer.setSpeed(1000);
 
     Delay.msDelay(500);
 
-    motorDrive.setSpeed(175);
-    motorSteer.setSpeed(175);
+    //checkRotationalPosition();
 
+    readLinesAndMoveTruck();
+  }
+
+  private void readLinesAndMoveTruck() {
     int i = 0;
-    int iterations = 15;
+    int iterations = 200;
+    boolean shouldRun = true;
+    // TODO: check for black line
     while (i < iterations) {
       readLines();
-      if (i % 5 == 0) {
-        System.out.println("Loop " + i);
-      }
+      System.out.println("Loop " + i);
       i++;
     }
+
+    this.motorSteer.rotateTo(0, true);
+    Delay.msDelay(750);
     this.stop();
   }
 
+
+  private void checkRotationalPosition() {
+    motorDrive.setSpeed(300);
+    this.motorSteer.setSpeed(400);
+    this.motorSteer.rotateTo(50, true);
+    System.out.println(80);
+    motorDrive.backward();
+    Delay.msDelay(5000);
+
+    this.motorSteer.rotateTo(0, true);
+    System.out.println(0);
+    motorDrive.backward();
+    Delay.msDelay(5000);
+
+    this.motorSteer.rotateTo(-50, true);
+    System.out.println(-80);
+    motorDrive.backward();
+    Delay.msDelay(5000);
+
+    this.motorSteer.rotateTo(0, true);
+    System.out.println(0);
+    motorDrive.backward();
+    Delay.msDelay(5000);
+    motorDrive.stop();
+  }
+
+  private void runTruckWithWebServer() {
+    for (; ; ) {
+      if (!Truck.inputCommandSCS.equals("")) {
+        this.handleCommand(inputCommandSCS);
+      }
+    }
+  }
+
+  private void handleCommand(String s) {
+    switch (s) {
+      case "kill":
+    }
+  }
+
   private void startingPosition() {
+    System.out.println("Started!");
+
     motorDrive.stop();
     motorSteer.stop();
-    motorSteer.rotateTo(400, true);
-    msDelay(3000);
+    //motorSteer.rotateTo(0, true);
+    msDelay(1500);
+    motorSteer.rotateTo(0, true);
+    System.out.println(
+        motorSteer.getPosition() + " " + motorSteer.getTachoCount() + " " + motorSteer
+            .getRotationSpeed() + " returned!");
+    msDelay(1500);
     motorSteer.stop();
-    msDelay(3000);
-    motorSteer.rotateTo(-6, true);
-    msDelay(3000);
-    motorSteer.stop();
+    System.out.println("ended starting position!");
+
   }
 
   private double getSpeed(Port port) {
@@ -256,37 +308,27 @@ public class DeliveryTruck extends Truck {
 
   @Override
   public void readLines() {
-    int previousDirection = 0;
+    int dirNow = 0;
     List<int[]> values = splitArray(lineReader.generateValues(1), 8,
         new int[]{1, 1, 1, 1, 1, 1, 1, 1});
 
-    for (int[] ints : values) {
-      System.out.print(ints[0] + ", ");
-    }
+    //previousDirection = directionToMove(values);
+    dirNow = followTheLine(values);
 
-    Delay.msDelay(2000);
-
-    if (values != null) {
-      //previousDirection = directionToMove(values);
-      previousDirection = followTheLine(values);
-    }
-
-    if (previousDirection == 402) {
-      motorDrive.stop();
-      motorSteer.stop();
-      msDelay(500);
+    if (dirNow == 402) {
       System.out.println("Lost line.");
+      int returnSpeed = prevDirection * -1;
+      motorSteer.rotateTo(returnSpeed, true);
+      msDelay(100);
+      System.out.println("Rotated by " + (prevDirection));
 
-      motorSteer.rotate(prevDirection);
-
+      motorDrive.backward();
       return;
     }
 
-    motorSteer.rotate(previousDirection, true);
-    msDelay(100);
-
+    motorSteer.rotateTo(dirNow, true);
     motorDrive.backward();
-    prevDirection = previousDirection;
+    prevDirection = dirNow;
   }
 
   private HashMap<Port, Double> initSpeeds(double[] speeds) {
