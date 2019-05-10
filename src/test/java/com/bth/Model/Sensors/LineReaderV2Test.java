@@ -5,7 +5,6 @@ import static com.bth.Utilities.ShippingSystemUtilities.splitArray;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNull;
 
-import java.util.Arrays;
 import java.util.List;
 import org.junit.After;
 import org.junit.Before;
@@ -33,7 +32,7 @@ public class LineReaderV2Test {
 
     int ret = followTheLine(finalValues);
 
-    assertEquals("Sensors found a black line to the right, should return 150 (right)", 150, ret);
+    assertEquals("Sensors found a black line to the right, should return 80 (right)", 80, ret);
   }
 
   @Test
@@ -41,7 +40,7 @@ public class LineReaderV2Test {
     values = new int[]{1, 7, 10, 4, 15, 2, 100, 68};
     List<int[]> finalValues = splitArray(values);
     int ret = followTheLine(finalValues);
-    assertEquals("Sensors found a black line to the left, should return -300 (left)", -300, ret);
+    assertEquals("Sensors found a black line to the left, should return -80 (left)", -80, ret);
   }
 
   @Test
@@ -52,7 +51,7 @@ public class LineReaderV2Test {
 
     int ret = followTheLine(finalValues);
 
-    assertEquals("Sensors found a black line in the middle, should return 30 (do nothing)", 30,
+    assertEquals("Sensors found a black line in the middle, should return 0 (do nothing)", 0,
         ret);
   }
 
@@ -64,7 +63,8 @@ public class LineReaderV2Test {
 
     int ret = followTheLine(finalValues);
 
-    assertEquals("Sensors found a black line to the left, direction should be 30 (do nothing)", 30,
+    assertEquals("Sensors found a black line to the left, direction should be 20 (little left)",
+        -20,
         ret);
   }
 
@@ -76,7 +76,7 @@ public class LineReaderV2Test {
 
     int ret = followTheLine(finalValues);
 
-    assertEquals("Sensors found a black line to the right, direction should be 300 (right)", 300,
+    assertEquals("Sensors found a black line to the right, direction should be 80 (right)", 80,
         ret);
   }
 
@@ -112,7 +112,7 @@ public class LineReaderV2Test {
 
     int ret = followTheLine(finalValues);
 
-    assertEquals("Sensors found a black line to the right, should return 150 (right)", 150, ret);
+    assertEquals("Sensors found a black line to the right, should return 80 (right)", 80, ret);
   }
 
   @Test
@@ -122,6 +122,6 @@ public class LineReaderV2Test {
 
     int val = followTheLine(test);
 
-    assertEquals("Should be -30", -30, val);
+    assertEquals("Should be 20", 20, val);
   }
 }

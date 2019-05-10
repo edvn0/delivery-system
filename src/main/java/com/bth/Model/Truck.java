@@ -25,7 +25,7 @@ public abstract class Truck {
       SensorPort.S4};
 
   public static void handlePath(String path) {
-    System.out.println("In Truck, will handle path: " + path);
+    inputCommandSCS = path;
   }
 
   /***

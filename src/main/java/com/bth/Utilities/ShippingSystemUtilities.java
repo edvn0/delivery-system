@@ -138,19 +138,18 @@ public class ShippingSystemUtilities {
 
     switch (sensor) {
       case 0:
-        return -300;
+        return -80;
       case 1:
-        return -150;
       case 2:
+        return -20;
       case 3:
-        return 30;
       case 4:
+        return 0;
       case 5:
-        return -30;
+        return 20;
       case 6:
-        return 150;
       case 7:
-        return 300;
+        return 80;
     }
     return 0;
   }
