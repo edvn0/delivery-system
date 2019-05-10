@@ -73,52 +73,14 @@ public class ShippingSystemUtilities {
   }
 
   /**
-   * Returns the direction for the vehicle to move, based on values sent in by the line reader
-   * sensors.
+   * Finds which way the truck should move according to the sensor values.
    *
-   * @param values CAL-values from the sensors.
-   * @return element in {-1,0,1} isomorphic to {left, middle, right}.
-   *
-   * TODO: think of something better than a hashmap and a switch statement moron...
+   * @param values sensor values
+   * @return directional velocity for truck, values in (-80,80)
    */
   public static int directionToMove(List<int[]> values) {
-
-    boolean shouldStop = shouldStop(values);
-    if (shouldStop) {
-      return 402;
-    }
-
-    HashMap<Double, Integer> valuesAndSensor = new HashMap<>();
-
-    double[] results = new double[values.size()];
-
-    for (int i = 0; i < results.length; i++) {
-      int[] tempValues = values.get(i);
-      results[i] = (double) IntStream.of(tempValues).sum() / tempValues.length;
-      valuesAndSensor.put(results[i], i);
-    }
-
-    double min = findMinimum(results);
-    int index = valuesAndSensor.get(min);
-
-    // Busy work heuristic check if we are seeing something not white.
-    // (DoubleStream.of(results).sum() / results.length) <= 80
-    System.out.println(index);
-    switch (index) {
-      case 0:
-        return -1;
-      case 1:
-      case 2:
-        return 0;
-      case 3:
-        return 1;
-    }
-    return 0;
-  }
-
-  public static int followTheLine(List<int[]> values) {
-    // X X X X X X X X //
-    boolean shouldStop = shouldStop(values);
+    // Check if we lost the line, if so, we return some sort of exit code, this case 402.
+    boolean shouldStop = checkIfLostLine(values);
     if (shouldStop) {
       return 402;
     }
@@ -161,26 +123,33 @@ public class ShippingSystemUtilities {
    * @param values input CAL values from the line reader.
    * @return should this vehicle stop? true for yes.
    */
-  public static boolean shouldStop(List<int[]> values) {
+  public static boolean checkIfLostLine(List<int[]> values) {
     int compare = 0;
-    int offset = 6;
+    int offset = 10;
 
-    for (int[] vals : values) {
-      compare += IntStream.of(vals).sum() / vals.length;
+    for (int[] ints : values) {
+      compare += IntStream.of(ints).sum() / ints.length;
     }
 
     compare /= values.size();
+    System.out.println(compare);
 
     // If this one is white, we should stop.
     if (compare >= 90) {
       return true;
     }
 
+    int max = compare + offset;
+    int min = compare - offset;
+
     // Check if all values are black...
     for (int[] ints : values) {
       for (int i : ints) {
-        if (!(i >= compare - offset && i - offset <= compare)) {
+        if (!(i <= max && i >= min)) {
           // compare = 25 (approx) => this returns false if i \notin [22,28]
+          System.out.println(compare - offset);
+          System.out.println(compare + offset);
+          System.out.println(i + " " + (i >= compare - offset) + " " + (i - offset <= compare));
           return false;
         }
       }
