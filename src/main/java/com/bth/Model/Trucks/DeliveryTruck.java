@@ -1,18 +1,18 @@
 package com.bth.Model.Trucks;
 
-import static com.bth.Utilities.ShippingSystemUtilities.directionToMove;
-import static com.bth.Utilities.ShippingSystemUtilities.splitArray;
-import static lejos.utility.Delay.msDelay;
-
 import com.bth.Model.Sensors.LineReaderV2;
 import com.bth.Model.Truck;
 import ev3dev.actuators.lego.motors.EV3LargeRegulatedMotor;
 import ev3dev.actuators.lego.motors.EV3MediumRegulatedMotor;
 import ev3dev.sensors.ev3.EV3TouchSensor;
 import ev3dev.sensors.ev3.EV3UltrasonicSensor;
-import java.util.List;
-import lejos.hardware.port.Port;
 import lejos.utility.Delay;
+
+import java.util.List;
+
+import static com.bth.Utilities.ShippingSystemUtilities.directionToMove;
+import static com.bth.Utilities.ShippingSystemUtilities.splitArray;
+import static lejos.utility.Delay.msDelay;
 
 public class DeliveryTruck extends Truck {
 
@@ -46,7 +46,8 @@ public class DeliveryTruck extends Truck {
 
     motorDrive = new EV3MediumRegulatedMotor(Truck.motorPorts[3]);   // PORT D
     motorSteer = new EV3MediumRegulatedMotor(Truck.motorPorts[2]);   // PORT C
-    extender = new EV3MediumRegulatedMotor(Truck.motorPorts[1]); // PORT S2
+      extender = new EV3MediumRegulatedMotor(Truck.motorPorts[1]); // PORT B
+
     lineReader = new LineReaderV2(Truck.sensorPorts[2]);   // PORT S3
     sensorProximity = new EV3UltrasonicSensor(Truck.sensorPorts[0]);   // PORT S1
 
@@ -75,10 +76,76 @@ public class DeliveryTruck extends Truck {
   public void runTruck() {
     motorDrive.setSpeed(400);
     motorSteer.setSpeed(1000);
+      extender.setSpeed(1000);
     Delay.msDelay(500);
     //checkRotationalPosition();
-    readLinesAndMoveTruck();
+      //readLinesAndMoveTruck();
+      //openPlateu();
+      //closePlateu();
+      rotate180Degrees();
+      zeroPosition();
   }
+
+
+    private void zeroPosition() {
+
+        msDelay(500);
+
+        motorSteer.setSpeed(1000);
+        motorDrive.setSpeed(300);
+
+        motorDrive.backward();
+        msDelay(500);
+        motorSteer.rotateTo(0, true);
+        msDelay(200);
+        motorDrive.stop();
+
+        msDelay(3000);
+
+    }
+
+    private void rotate180Degrees() {
+
+        msDelay(500);
+        motorDrive.setSpeed(1000);
+
+        //Forward drive with turn on wheels
+        motorSteer.rotateTo(70, true);
+        motorDrive.backward();
+        msDelay(6500);
+        motorDrive.stop();
+
+        //Straight wheels
+        motorSteer.rotateTo(0, true);
+        motorDrive.forward();
+        msDelay(2200);
+        motorDrive.stop();
+
+        //Turned wheels backwards
+        motorSteer.rotateTo(-70, true);
+        motorDrive.forward();
+        msDelay(4200);
+        motorDrive.stop();
+
+    }
+
+    private void closePlateu() {
+
+        extender.backward();
+        msDelay(5000);
+        extender.stop();
+        msDelay(100);
+    }
+
+    private void openPlateu() {
+
+        extender.forward();
+        msDelay(5000);
+        extender.stop();
+        msDelay(100);
+
+    }
+
 
   private void readLinesAndMoveTruck() {
     boolean shouldRun = true;
